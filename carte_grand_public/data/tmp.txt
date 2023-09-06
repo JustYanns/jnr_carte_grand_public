@@ -1,0 +1,50 @@
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="atelier_jeux">
+    <label class="form-check-label" for="atelier_jeux">Atelier avec jeux</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="atelier_sensibilisation">
+    <label class="form-check-label" for="atelier_sensibilisation">Atelier de sensibilisation</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="conference">
+    <label class="form-check-label" for="conference">Conférence</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="exercice_de_gestion_de_crise">
+    <label class="form-check-label" for="exercice_de_gestion_de_crise">Exercice de gestion de crise</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="exposition">
+    <label class="form-check-label" for="exposition">Exposition</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="formation">
+    <label class="form-check-label" for="formation">Formation</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="reunion_d_information">
+    <label class="form-check-label" for="reunion_d_information">Réunion d'information</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="spectacle">
+    <label class="form-check-label" for="spectacle">Spectacle</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="visite_en_plein_air">
+    <label class="form-check-label" for="visite_en_plein_air">Visite en plein air</label>
+</div>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="visite_en_interieur">
+    <label class="form-check-label" for="visite_en_interieur">Visite en intérieur</label>
+</div>
