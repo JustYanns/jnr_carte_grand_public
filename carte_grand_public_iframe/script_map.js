@@ -212,7 +212,7 @@ function plot_actions_markers(data) {
             
             // Lien vers plus d'information
             if (item.lien_programme) {
-                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + '>cliquez ici</a>';
+                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + ' target="_blank">cliquez ici</a>';
             } else {
                 popupContent += "<br>(Pas de ressource additionnelle fournie par l'organisateur.)";
             }
