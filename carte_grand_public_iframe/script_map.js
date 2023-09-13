@@ -416,7 +416,7 @@ $(document).ready(function () {
         saint_barthelemy : {coords : [17.897977, -62.828982], zoom : 12},
         saint_martin : {coords : [18.075397, -63.051992], zoom : 12},
         wallis_et_futuna : {coords : [-13.845094, -177.239133], zoom : 8},
-        polynesie_française : {coords : [-12.759267, -144.227034], zoom : 7},
+        polynesie_française : {coords : [-17.711357, -149.371015], zoom : 8},
         nouvelle_caledonie : {coords : [-21.405677, 165.531372], zoom : 8}
     }
 
