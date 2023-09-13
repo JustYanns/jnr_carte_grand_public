@@ -13,6 +13,12 @@
     display: inline-block;
 }
 
+/* Police Marianne - Regular */
+@font-face {
+    font-family: 'Marianne';
+    src: url('fonts/Marianne-Regular.woff2') format('woff2');
+}
+
 body {
     font-family: Marianne;
   }
