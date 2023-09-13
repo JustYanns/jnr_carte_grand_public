@@ -108,35 +108,27 @@
 
                 <!-- Carte -->
                 <div id="map" style="height: 700px;"></div>
-                <div class="row mt-3"><h4>Sélectionnez une zone d'affichage :</h4></div>
-                
-                <div class="row mt-1">
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Guyane</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">La Réunion</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Guadeloupe</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Martinique</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Mayotte</button>
-                    </div>
-                </div>
 
-                <div class="row mt-4">
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Nouvelle-Calédonie</button>
+
+                <div class="row mt-3">
+                    <div class="col-4">
+                        Zone d'affichage : 
                     </div>
                     <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Saint-Pierre et Miquelon</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="changeMapViewBtn btn btn-light" style="width:100%">Hexagone / Corse</button>
+                        <select id="selectRegion" class="form-control">
+                            <option value="metropole">Hexagone / Corse</option>
+                            <option value="guadeloupe">Guadeloupe</option>
+                            <option value="martinique">Martinique</option>
+                            <option value="guyane">Guyane</option>
+                            <option value="la_reunion">La Réunion</option>
+                            <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
+                            <option value="mayotte">Mayotte</option>
+                            <option value="saint_barthelemy">Saint-Barthélemy</option>
+                            <option value="saint_martin">Saint-Martin</option>
+                            <option value="wallis_et_futuna">Wallis-et-Futuna</option>
+                            <option value="polynesie_française">Polynésie française</option>
+                            <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
+                        </select>
                     </div>
                 </div>
 
@@ -503,6 +495,10 @@
                     </div>
 
                 </div>
+
+                <!-- Actions dématerialisées -->
+                <h3 class="mt-4" id="actions_demat_header">Actions dématerialisées</h3>
+                <div id="actions_demat"></div>
 
             </div>
 

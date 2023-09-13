@@ -10,6 +10,10 @@ var OSM_dpt_data;
 var select_all_risque = true;
 var select_all_public = true;
 
+const dateFormatter = new Intl.DateTimeFormat('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+const date_JNR = new Date(2023, 10, 13)
+const date_today = new Date();
+
 // Création des markers
 const riskNat_marker = L.AwesomeMarkers.icon({
     markerColor: 'green'
@@ -21,6 +25,18 @@ const riskTEch_marker = L.AwesomeMarkers.icon({
 
 const riskMult_marker = L.AwesomeMarkers.icon({
     markerColor: 'blue'
+});
+
+const riskNat_marker_b = L.AwesomeMarkers.icon({
+    markerColor: 'lightgreen'
+});
+
+const riskTEch_marker_b = L.AwesomeMarkers.icon({
+    markerColor: 'lightred'
+});
+
+const riskMult_marker_b = L.AwesomeMarkers.icon({
+    markerColor: 'lightblue'
 });
 
 // Function for filter the list returned by papa parse : intersection
@@ -122,8 +138,6 @@ function gc_distance(lat1, lon1, lat2, lon2) {
 // lat lon in degrees, max_dist in metres
 function filter_distance(data, lat, lon, max_dist) {
 
-    console.log(lat,lon,max_dist)
-
     data = data.filter(function(i) {
         d = gc_distance(lat,lon,i.lat,i.lon)
         return d < max_dist;
@@ -171,8 +185,8 @@ function plot_actions_markers(data) {
         var lat = item.lat;
         var lon = item.lon;
 
-        // Vérification si les coordonnées sont valides (pas NaN)
-        if (!isNaN(lat) && !isNaN(lon)) {
+        // Vérification si les coordonnées sont valides (pas NaN) et que date fin > date du jour
+        if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
 
             nb_actions += 1;
 
@@ -183,26 +197,45 @@ function plot_actions_markers(data) {
             }
 
             var popupContent = '<strong>' + item.nom + '</strong><br><em>' + item.adresse + '</em><br>'
-            
-            if (item.date_debut == item.date_fin) {
-                if (item.date_debut == "2023-10-13") {
+
+            if (item.date_debut.getTime() === item.date_fin.getTime()) {
+                if (item.date_debut.getTime() === date_JNR.getTime()) {
                     popupContent += "Le 13/10/2023, Journée nationale de la résilience" + '<br>'
                 } else {
-                    popupContent += "Le " + item.date_debut + '<br>'
+                    popupContent += "Le " + dateFormatter.format(item.date_debut) + '<br>'
                 }
             } else {
-                popupContent += 'Du ' + item.date_debut + ' au ' + item.date_fin + '<br>'
+                popupContent += 'Du ' + dateFormatter.format(item.date_debut) + ' au ' + dateFormatter.format(item.date_fin) + '<br>'
             }
             
-            popupContent += '<strong>Organisé par :</strong> ' + item.organisateur + '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str  + "<br>Pour plus d'information <a href=" + item.lien_programme + '>cliquez ici</a>';
-
-            if (item.est_risques_naturels && item.est_risques_technologiques) {
-                var marker = L.marker([lat, lon],{icon: riskMult_marker}).bindPopup(popupContent);
-            } else if (item.est_risques_naturels) {
-                var marker = L.marker([lat, lon],{icon: riskNat_marker}).bindPopup(popupContent);
+            popupContent += '<strong>Organisé par :</strong> ' + item.organisateur + '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
+            
+            // Lien vers plus d'information
+            if (item.lien_programme) {
+                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + '>cliquez ici</a>';
             } else {
-                var marker = L.marker([lat, lon],{icon: riskTEch_marker}).bindPopup(popupContent);
+                popupContent += "<br>(Pas de ressource additionnelle fournie par l'organisateur.)";
             }
+
+            if (item.est_grand_public) {
+                if (item.est_risques_naturels && item.est_risques_technologiques) {
+                    var marker = L.marker([lat, lon],{icon: riskMult_marker}).bindPopup(popupContent);
+                } else if (item.est_risques_naturels) {
+                    var marker = L.marker([lat, lon],{icon: riskNat_marker}).bindPopup(popupContent);
+                } else {
+                    var marker = L.marker([lat, lon],{icon: riskTEch_marker}).bindPopup(popupContent);
+                }
+            } else {
+                if (item.est_risques_naturels && item.est_risques_technologiques) {
+                    var marker = L.marker([lat, lon],{icon: riskMult_marker_b}).bindPopup(popupContent);
+                } else if (item.est_risques_naturels) {
+                    var marker = L.marker([lat, lon],{icon: riskNat_marker_b}).bindPopup(popupContent);
+                } else {
+                    var marker = L.marker([lat, lon],{icon: riskTEch_marker_b}).bindPopup(popupContent);
+                }
+            }
+
+            
 
             markers.addLayer(marker);
 
@@ -216,10 +249,55 @@ function plot_actions_markers(data) {
 };
 
 
+function display_dematerialized_actions(data) {
+
+    tableContainer = $("#actions_demat");
+    
+    var table = $("<table>").addClass("table table-bordered");
+
+    var thead = $("<thead>");
+    var headerRow = $("<tr>");
+
+    ["Nom de l'action", "Organisateur", "Lien vers la ressource"].forEach(function(item) {
+        var th = $("<th>").text(item);
+        headerRow.append(th);
+    }) 
+
+    thead.append(headerRow);
+    table.append(thead);
+
+    // Corps du tableau
+    var tbody = $("<tbody>");
+
+    $.each(data, function (index, item) {
+
+        if (item["lien_programme"]) {
+            var row = $("<tr>");
+
+            $.each(["nom","organisateur"], function (index, label) {
+                var cell = $("<td>").text(item[label]);
+                row.append(cell);
+            });
+    
+            var cell = $("<td>").html(`<a href=${item["lien_programme"]}>${item["lien_programme"]}</a>` );
+            row.append(cell);
+    
+            tbody.append(row);
+        }
+
+    });
+
+    table.append(tbody);
+
+    tableContainer.append(table)
+
+}
+
+
 $(document).ready(function () {
 
     // Création de la carte avec Leaflet
-    map = L.map('map').setView([46.5, 2.3522], 6); // Coordonnées de départ et niveau de zoom
+    map = L.map('map').setView([46.5, 2.3522],5); // Coordonnées de départ et niveau de zoom
     
     // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); // Fond de carte OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -236,7 +314,10 @@ $(document).ready(function () {
 
             // On parse les colonnes de booléens et de flottant 
             var float_cols = ["lat","lon"]
-            var bool_cols = ["est_grand_public","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
+            var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
+            var date_cols = ["date_debut", "date_fin"]
+
+            var dateString, dateParts;
             
             csvData.data.forEach(function(row) {
 
@@ -248,6 +329,23 @@ $(document).ready(function () {
                 bool_cols.forEach(function(col_name) {
                     row[col_name] = row[col_name] === "True" ? true : false
                 })
+
+                date_cols.forEach(function(col_name) {
+                    dateString = row[col_name];
+                    dateParts = dateString.split("-"); // Divise la chaîne en trois parties : année, mois, jour
+                    // Mois vont de 0 à 11 en js
+                    row[col_name] = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                })
+
+                // lien programme 
+                if (row["lien_programme"]) {
+                    if (!(row["lien_programme"].startsWith("http://") || row["lien_programme"].startsWith("https://")) && !row["lien_programme"].startsWith("www.")) {
+                        row["lien_programme"] = "http://www." + row["lien_programme"];
+                    } else if (row["lien_programme"].startsWith("www.") && !row["lien_programme"].startsWith("http://")) {
+                        row["lien_programme"] = "http://" + row["lien_programme"];
+                    }
+                }
+                
     
             });
 
@@ -284,19 +382,15 @@ $(document).ready(function () {
             };
             legend.addTo(map);
 
+            // Affichage des actions dématerialisées
+            data = filter_column(csvData.data, "est_dematerialisee");
+            display_dematerialized_actions(data);
+
+
             // Décompte des actions
             nb_actions_total = csvData.data.length;
             $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
             $("#action_count_detail").html(`Dont <strong>${nb_actions}</strong> actions non dématerialisées ouvertes au grand public`)
-
-
-
-            
-
-            // Pas facile à compter 
-            // nb_actions_grand = count_true(csvData.data, "est_dematerialisee");
-            // $("#action_count_detail").html(`Dont <strong>${nb_actions_demat}</strong> actions dématerialisées`)
-
             
         }
     });
@@ -310,42 +404,27 @@ $(document).ready(function () {
         .catch(error => console.error('Une erreur s\'est produite :', error));
 
     // Boutons pour changer la vue de la carte
-    var locations = [
-        { coords: [4.035282, -53.113578], zoom: 7 },   // Guyanne 
-        { coords: [-21.125720, 55.535528], zoom: 9 },  // La Réunion
-        { coords: [16.272048, -61.548002], zoom: 9 },  // Guadeloupe
-        { coords: [14.670835, -61.009602], zoom: 10},  // Martinique
-        { coords: [-12.836948, 45.155820], zoom: 10 },    // Mayotte
-        { coords: [-21.405677, 165.531372], zoom: 8 },    // Nouvelle caledonie
-        { coords: [46.954482, -56.327337], zoom: 10 },    // St pierre et miquelon
-        { coords: [47, 2.3522], zoom: 6 }    // Métropole
-      ];
 
-    var domtom_dptcodes = [
-        "973", // Guyane
-        "974", // La Réunion
-        "971", // La Guadeloupe
-        "972", // Martinique
-        "976", // Mayotte
-    ]
+    var zoom_center_areas = {
+        metropole : {coords : [47, 2.3522], zoom : 5},
+        guadeloupe : {coords : [16.272048, -61.548002], zoom : 9},
+        martinique : {coords : [14.670835, -61.009602], zoom : 10},
+        guyane : {coords : [4.035282, -53.113578], zoom : 7},
+        la_reunion : {coords : [-21.125720, 55.535528], zoom : 9},
+        saint_pierre_et_miquelon : {coords : [46.954482, -56.327337], zoom : 10},
+        mayotte : {coords : [-12.836948, 45.155820], zoom : 10},
+        saint_barthelemy : {coords : [17.897977, -62.828982], zoom : 12},
+        saint_martin : {coords : [18.075397, -63.051992], zoom : 12},
+        wallis_et_futuna : {coords : [-13.845094, -177.239133], zoom : 8},
+        polynesie_française : {coords : [-12.759267, -144.227034], zoom : 7},
+        nouvelle_caledonie : {coords : [-21.405677, 165.531372], zoom : 8}
+    }
 
+    $('#selectRegion').change(function() {
 
-    $('.changeMapViewBtn').each(function(index) {
-        $(this).on('click', function() {
-          // Récupérez les coordonnées et le niveau de zoom associés à ce bouton en utilisant l'index de la boucle
-          var location = locations[index];
-          var coords = location.coords;
-          var zoom = location.zoom;
-    
-          // Mettez à jour la vue de la carte avec les nouvelles coordonnées et le nouveau niveau de zoom
-          map.setView(coords, zoom);
+        var zoom_data = zoom_center_areas[$(this).val()];
+        map.setView(zoom_data["coords"], zoom_data["zoom"]);
 
-          // Si il s'agit d'un dom tom on met aussi à jour les stats départementales
-          if (index < domtom_dptcodes.length) {
-            update_plot_nb_actions(domtom_dptcodes[index]);
-            update_dpt_button(domtom_dptcodes[index]);
-          }
-        });
     });
 
     // Fonction retournant les coordonnées lat lon à partir d'une adresse
@@ -413,7 +492,6 @@ $(document).ready(function () {
         }
 
         // Apparement pas en France
-        console.log(data);
         throw new Error("Erreur lors de la récupération du département.")
 
       }
@@ -502,8 +580,8 @@ $(document).ready(function () {
         // map.addLayer(marker);
         
         // Mise à jour des statistiques départementales
-        update_plot_nb_actions(dpt_code);
-        update_dpt_button(dpt_code);
+        // update_plot_nb_actions(dpt_code);
+        // update_dpt_button(dpt_code);
     }
     
     // Attacher la fonction onSubmitForm à l'événement submit du formulaire
@@ -536,8 +614,8 @@ $(document).ready(function () {
         map.setView([zoom_info["lat"], zoom_info["lon"]], zoom_info["zoom_level"]);
 
         // Mettre à jour le volet stats départementales
-        update_plot_nb_actions(dpt_code);
-        update_dpt_button(dpt_code);
+        // update_plot_nb_actions(dpt_code);
+        // update_dpt_button(dpt_code);
         
 
     });
@@ -575,8 +653,6 @@ $(document).ready(function () {
             }
         });
 
-        console.log(type_action_to_filter_on);
-
         // On filtre les données
 
         // Actions public restreint 
@@ -601,6 +677,10 @@ $(document).ready(function () {
         } else {
             $("#filter_action_counter").html(`${nb_actions} actions trouvées.`)
         }
+
+        // On scroll pour se ramener sur la carte
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
+
         
 
     }
@@ -621,13 +701,5 @@ $(document).ready(function () {
     $("#deselect_type_action").click(function() {
         $("#select_type_action_form input[type='checkbox']").prop("checked", false);
     });
-    
-
-        
-    
-
-
-
-
 
 });
