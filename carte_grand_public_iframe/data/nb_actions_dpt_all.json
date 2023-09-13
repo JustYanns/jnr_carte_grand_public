@@ -1,0 +1,1001 @@
+{
+    "01": {
+        "Nombre actions": 0
+    },
+    "02": {
+        "Nombre actions": 0
+    },
+    "2A": {
+        "Nombre actions": 0
+    },
+    "2B": {
+        "Nombre actions": 0
+    },
+    "03": {
+        "Nombre actions": 0
+    },
+    "04": {
+        "Nombre actions": 0
+    },
+    "05": {
+        "Nombre actions": 0
+    },
+    "06": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "07": {
+        "Nombre actions": 0
+    },
+    "08": {
+        "Nombre actions": 0
+    },
+    "09": {
+        "Nombre actions": 0
+    },
+    "10": {
+        "Nombre actions": 0
+    },
+    "11": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "12": {
+        "Nombre actions": 0
+    },
+    "13": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "14": {
+        "Nombre actions": 0
+    },
+    "15": {
+        "Nombre actions": 0
+    },
+    "16": {
+        "Nombre actions": 0
+    },
+    "17": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "18": {
+        "Nombre actions": 0
+    },
+    "19": {
+        "Nombre actions": 0
+    },
+    "21": {
+        "Nombre actions": 0
+    },
+    "22": {
+        "Nombre actions": 0
+    },
+    "23": {
+        "Nombre actions": 0
+    },
+    "24": {
+        "Nombre actions": 0
+    },
+    "25": {
+        "Nombre actions": 0
+    },
+    "26": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "27": {
+        "Nombre actions": 0
+    },
+    "28": {
+        "Nombre actions": 0
+    },
+    "29": {
+        "Nombre actions": 0
+    },
+    "30": {
+        "Nombre actions": 0
+    },
+    "31": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "32": {
+        "Nombre actions": 0
+    },
+    "33": {
+        "Nombre actions": 0
+    },
+    "34": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "35": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "36": {
+        "Nombre actions": 0
+    },
+    "37": {
+        "Nombre actions": 0
+    },
+    "38": {
+        "Nombre actions": 0
+    },
+    "39": {
+        "Nombre actions": 0
+    },
+    "40": {
+        "Nombre actions": 0
+    },
+    "41": {
+        "Nombre actions": 0
+    },
+    "42": {
+        "Nombre actions": 0
+    },
+    "43": {
+        "Nombre actions": 0
+    },
+    "44": {
+        "Nombre actions": 0
+    },
+    "45": {
+        "Nombre actions": 0
+    },
+    "46": {
+        "Nombre actions": 0
+    },
+    "47": {
+        "Nombre actions": 0
+    },
+    "48": {
+        "Nombre actions": 0
+    },
+    "49": {
+        "Nombre actions": 5,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "50": {
+        "Nombre actions": 0
+    },
+    "51": {
+        "Nombre actions": 0
+    },
+    "52": {
+        "Nombre actions": 0
+    },
+    "53": {
+        "Nombre actions": 0
+    },
+    "54": {
+        "Nombre actions": 0
+    },
+    "55": {
+        "Nombre actions": 0
+    },
+    "56": {
+        "Nombre actions": 0
+    },
+    "57": {
+        "Nombre actions": 0
+    },
+    "58": {
+        "Nombre actions": 0
+    },
+    "59": {
+        "Nombre actions": 0
+    },
+    "60": {
+        "Nombre actions": 0
+    },
+    "61": {
+        "Nombre actions": 0
+    },
+    "62": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "63": {
+        "Nombre actions": 0
+    },
+    "64": {
+        "Nombre actions": 3,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            3,
+            1,
+            0,
+            1,
+            0,
+            2,
+            2,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "65": {
+        "Nombre actions": 0
+    },
+    "66": {
+        "Nombre actions": 0
+    },
+    "67": {
+        "Nombre actions": 0
+    },
+    "68": {
+        "Nombre actions": 0
+    },
+    "69": {
+        "Nombre actions": 0
+    },
+    "70": {
+        "Nombre actions": 0
+    },
+    "71": {
+        "Nombre actions": 0
+    },
+    "72": {
+        "Nombre actions": 0
+    },
+    "73": {
+        "Nombre actions": 0
+    },
+    "74": {
+        "Nombre actions": 3,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            3,
+            0,
+            2,
+            3,
+            0,
+            3,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "75": {
+        "Nombre actions": 0
+    },
+    "76": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "77": {
+        "Nombre actions": 0
+    },
+    "78": {
+        "Nombre actions": 0
+    },
+    "79": {
+        "Nombre actions": 0
+    },
+    "80": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "81": {
+        "Nombre actions": 0
+    },
+    "82": {
+        "Nombre actions": 0
+    },
+    "83": {
+        "Nombre actions": 0
+    },
+    "84": {
+        "Nombre actions": 0
+    },
+    "85": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "86": {
+        "Nombre actions": 0
+    },
+    "87": {
+        "Nombre actions": 0
+    },
+    "88": {
+        "Nombre actions": 0
+    },
+    "89": {
+        "Nombre actions": 0
+    },
+    "90": {
+        "Nombre actions": 0
+    },
+    "91": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "92": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "93": {
+        "Nombre actions": 1,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "94": {
+        "Nombre actions": 0
+    },
+    "95": {
+        "Nombre actions": 0
+    },
+    "971": {
+        "Nombre actions": 4,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            0,
+            4,
+            4,
+            0,
+            0,
+            1,
+            0,
+            1
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "972": {
+        "Nombre actions": 3,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            2,
+            0,
+            3,
+            3,
+            3,
+            2,
+            1,
+            0,
+            1
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    },
+    "976": {
+        "Nombre actions": 0
+    },
+    "974": {
+        "Nombre actions": 0
+    },
+    "973": {
+        "Nombre actions": 0
+    },
+    "978": {
+        "Nombre actions": 2,
+        "Type de risque": [
+            "Inondations",
+            "Feux de for\u00eat",
+            "Temp\u00eate/cyclone",
+            "S\u00e9isme",
+            "\u00c9ruption volcanique",
+            "Mouvement de terrain",
+            "Risques littoraux",
+            "Avalanche",
+            "Radon"
+        ],
+        "Nombre d'actions": [
+            0,
+            0,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+        ],
+        "couleur_plot": [
+            "#74BFDF",
+            "#FC7C7C",
+            "#B4CAD3",
+            "#D3C7B4",
+            "#FFB475",
+            "#A87C56",
+            "#A9FBF7",
+            "#E4E6E6",
+            "#FDC7FD"
+        ]
+    }
+}

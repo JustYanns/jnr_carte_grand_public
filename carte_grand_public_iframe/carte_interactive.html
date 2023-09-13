@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte interactive</title>
+    
+    <!-- Liens vers les bibliothèques Bootstrap, Leaflet et jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"> -->
+    <!-- Bootstrap Font Icon CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> -->
+
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
+
+    <!-- Include the Leaflet.markercluster library -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" /> -->
+
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script> -->
+    <!-- Include the Leaflet.markercluster library -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script> -->
+
+    <!-- Include icons and custom leaflet markers-->
+    <!-- <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+    <script src="js/leaflet.awesome-markers.js"></script>
+     -->
+    <!-- Counter animation-->
+    <!-- <link rel="stylesheet" href="custom_styling.css"> -->
+
+    <!-- Inclure les bibliothèques D3.js et Plotly.js -->
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+
+       <!-- Liens vers les bibliothèques Bootstrap, Leaflet et jQuery -->
+       <script src="js/jquery-3.6.0.min.js"></script>
+
+       <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+
+       <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+       <!-- Bootstrap Font Icon CSS -->
+       <!-- <link rel="stylesheet" href="css/bootstrap-icons.css"> -->
+   
+       <script src="js/bootstrap.bundle.min.js"></script>
+       <script src="js/bootstrap.min.js"></script>
+       <link rel="stylesheet" href="css/leaflet.css" />
+       <script src="js/leaflet.js"></script>
+   
+       <!-- Include the Leaflet.markercluster library -->
+       <link rel="stylesheet" href="css/MarkerCluster.css" />
+       <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+   
+   
+       <script src="js/papaparse.min.js"></script>
+       <!-- Include the Leaflet.markercluster library -->
+       <script src="js/leaflet.markercluster.js"></script>
+   
+       <!-- Include icons and custom leaflet markers-->
+       <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+       <script src="js/leaflet.awesome-markers.js"></script>
+       
+       <!-- Counter animation-->
+       <link rel="stylesheet" href="custom_styling.css">
+   
+       <!-- Inclure les bibliothèques D3.js et Plotly.js -->
+       <script src="js/d3.v5.min.js"></script>
+       <script src="js/plotly-latest.min.js"></script>
+
+        <!-- Inclure Danfo.js via CDN -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/danfojs-node@1.1.0/dist/danfo.min.js"></script> -->
+
+        <!-- Lodash for filtering -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+   
+    
+</head>
+<body>
+
+    <div class="container-fluid">
+
+        <!-- Texte d'en tête -->
+        <h1>Journée nationale de la résilience</h1>
+        <p>Retrouvez sur cette carte la localisation des différentes actions organisées cette année dans le cadre de la <strong>journée nationale de la résilience du 13 octobre 2023</strong>, certaines actions prennent place à d'autres moments de l'année. Cliquez sur le marqueur d'une action pour avoir plus d'informations.</p>
+
+        <!-- Nombre d'actions / statistiques -->
+        <div class="row my-4">
+            
+            <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
+            <h3 id="action_counter"></h3>
+            <p id="action_count_detail"></p>
+
+        </div>
+
+        <!-- Carte -->
+        <div id="map" style="height: 700px;"></div>
+
+
+        <div class="row mt-3">
+            <div class="col-4">
+                Zone d'affichage : 
+            </div>
+            <div class="col">
+                <select id="selectRegion" class="form-control">
+                    <option value="metropole">Hexagone / Corse</option>
+                    <option value="guadeloupe">Guadeloupe</option>
+                    <option value="martinique">Martinique</option>
+                    <option value="guyane">Guyane</option>
+                    <option value="la_reunion">La Réunion</option>
+                    <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
+                    <option value="mayotte">Mayotte</option>
+                    <option value="saint_barthelemy">Saint-Barthélemy</option>
+                    <option value="saint_martin">Saint-Martin</option>
+                    <option value="wallis_et_futuna">Wallis-et-Futuna</option>
+                    <option value="polynesie_française">Polynésie française</option>
+                    <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Choix localisation / filtres -->
+
+        <div class="accordion mt-4"  id="accordionForm1">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapseOne"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
+                        Quelles actions JNR près de chez moi ?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-parent="#accordionForm1">
+                    <div class="accordion-body">
+                        
+                        <form id="locationForm">
+                            <div class="form-group">
+                                <label for="addressInput">Mon adresse :</label>
+                                <input type="text" class="form-control" id="addressInput" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="distanceSelect">Distance :</label>
+                                <select class="form-control" id="distanceSelect">
+                                <option value="10000">10 km</option>
+                                <option value="20000">20 km</option>
+                                <option value="50000">50 km</option>
+                                <option value="100000">100 km</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                        </form>
+                        <!-- Élément pour afficher le message d'erreur -->
+                        <div id="error-message" class="text-danger"></div>
+                        <div class="mt-2" id="location_action_counter"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
+                        Quelles actions JNR dans mon département ?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-parent="#accordionForm1">
+                    <div class="accordion-body">
+
+                        <div id="dpt-dropdown" class="dropdown" >
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Département
+                            </button>
+                            <div class="dropdown-menu" id="dpt-dropdown" aria-labelledby="dropdownMenuButton"  style="overflow-y:auto; max-height:40vh">
+                                <a class="dropdown-item" href="#" value="01">01 - Ain</a>
+                                <a class="dropdown-item" href="#" value="02">02 - Aisne</a>
+                                <a class="dropdown-item" href="#" value="2A">2A - Corse-du-Sud</a>
+                                <a class="dropdown-item" href="#" value="2B">2B - Haute-Corse</a>
+                                <a class="dropdown-item" href="#" value="03">03 - Allier</a>
+                                <a class="dropdown-item" href="#" value="04">04 - Alpes-de-Haute-Provence</a>
+                                <a class="dropdown-item" href="#" value="05">05 - Hautes-Alpes</a>
+                                <a class="dropdown-item" href="#" value="06">06 - Alpes-Maritimes</a>
+                                <a class="dropdown-item" href="#" value="07">07 - Ardèche</a>
+                                <a class="dropdown-item" href="#" value="08">08 - Ardennes</a>
+                                <a class="dropdown-item" href="#" value="09">09 - Ariège</a>
+                                <a class="dropdown-item" href="#" value="10">10 - Aube</a>
+                                <a class="dropdown-item" href="#" value="11">11 - Aude</a>
+                                <a class="dropdown-item" href="#" value="12">12 - Aveyron</a>
+                                <a class="dropdown-item" href="#" value="13">13 - Bouches-du-Rhône</a>
+                                <a class="dropdown-item" href="#" value="14">14 - Calvados</a>
+                                <a class="dropdown-item" href="#" value="15">15 - Cantal</a>
+                                <a class="dropdown-item" href="#" value="16">16 - Charente</a>
+                                <a class="dropdown-item" href="#" value="17">17 - Charente-Maritime</a>
+                                <a class="dropdown-item" href="#" value="18">18 - Cher</a>
+                                <a class="dropdown-item" href="#" value="19">19 - Corrèze</a>
+                                <a class="dropdown-item" href="#" value="21">21 - Côte-d'Or</a>
+                                <a class="dropdown-item" href="#" value="22">22 - Côtes d'Armor</a>
+                                <a class="dropdown-item" href="#" value="23">23 - Creuse</a>
+                                <a class="dropdown-item" href="#" value="24">24 - Dordogne</a>
+                                <a class="dropdown-item" href="#" value="25">25 - Doubs</a>
+                                <a class="dropdown-item" href="#" value="26">26 - Drôme</a>
+                                <a class="dropdown-item" href="#" value="27">27 - Eure</a>
+                                <a class="dropdown-item" href="#" value="28">28 - Eure-et-Loir</a>
+                                <a class="dropdown-item" href="#" value="29">29 - Finistère</a>
+                                <a class="dropdown-item" href="#" value="30">30 - Gard</a>
+                                <a class="dropdown-item" href="#" value="31">31 - Haute-Garonne</a>
+                                <a class="dropdown-item" href="#" value="32">32 - Gers</a>
+                                <a class="dropdown-item" href="#" value="33">33 - Gironde</a>
+                                <a class="dropdown-item" href="#" value="34">34 - Hérault</a>
+                                <a class="dropdown-item" href="#" value="35">35 - Ille-et-Vilaine</a>
+                                <a class="dropdown-item" href="#" value="36">36 - Indre</a>
+                                <a class="dropdown-item" href="#" value="37">37 - Indre-et-Loire </a>
+                                <a class="dropdown-item" href="#" value="38">38 - Isère</a>
+                                <a class="dropdown-item" href="#" value="39">39 - Jura</a>
+                                <a class="dropdown-item" href="#" value="40">40 - Landes</a>
+                                <a class="dropdown-item" href="#" value="41">41 - Loir-et-Cher</a>
+                                <a class="dropdown-item" href="#" value="42">42 - Loire</a>
+                                <a class="dropdown-item" href="#" value="43">43 - Haute-Loire</a>
+                                <a class="dropdown-item" href="#" value="44">44 - Loire-Atlantique</a>
+                                <a class="dropdown-item" href="#" value="45">45 - Loiret</a>
+                                <a class="dropdown-item" href="#" value="46">46 - Lot</a>
+                                <a class="dropdown-item" href="#" value="47">47 - Lot-et-Garonne</a>
+                                <a class="dropdown-item" href="#" value="48">48 - Lozère</a>
+                                <a class="dropdown-item" href="#" value="49">49 - Maine-et-Loire</a>
+                                <a class="dropdown-item" href="#" value="50">50 - Manche</a>
+                                <a class="dropdown-item" href="#" value="51">51 - Marne</a>
+                                <a class="dropdown-item" href="#" value="52">52 - Haute-Marne</a>
+                                <a class="dropdown-item" href="#" value="53">53 - Mayenne</a>
+                                <a class="dropdown-item" href="#" value="54">54 - Meurthe-et-Moselle</a>
+                                <a class="dropdown-item" href="#" value="55">55 - Meuse</a>
+                                <a class="dropdown-item" href="#" value="56">56 - Morbihan</a>
+                                <a class="dropdown-item" href="#" value="57">57 - Moselle</a>
+                                <a class="dropdown-item" href="#" value="58">58 - Nièvre</a>
+                                <a class="dropdown-item" href="#" value="59">59 - Nord</a>
+                                <a class="dropdown-item" href="#" value="60">60 - Oise</a>
+                                <a class="dropdown-item" href="#" value="61">61 - Orne</a>
+                                <a class="dropdown-item" href="#" value="62">62 - Pas-de-Calais</a>
+                                <a class="dropdown-item" href="#" value="63">63 - Puy-de-Dôme</a>
+                                <a class="dropdown-item" href="#" value="64">64 - Pyrénées-Atlantiques</a>
+                                <a class="dropdown-item" href="#" value="65">65 - Hautes-Pyrénées</a>
+                                <a class="dropdown-item" href="#" value="66">66 - Pyrénées-Orientales</a>
+                                <a class="dropdown-item" href="#" value="67">67 - Bas-Rhin</a>
+                                <a class="dropdown-item" href="#" value="68">68 - Haut-Rhin</a>
+                                <a class="dropdown-item" href="#" value="69">69 - Rhône</a>
+                                <a class="dropdown-item" href="#" value="70">70 - Haute-Saône</a>
+                                <a class="dropdown-item" href="#" value="71">71 - Saône-et-Loire</a>
+                                <a class="dropdown-item" href="#" value="72">72 - Sarthe</a>
+                                <a class="dropdown-item" href="#" value="73">73 - Savoie</a>
+                                <a class="dropdown-item" href="#" value="74">74 - Haute-Savoie</a>
+                                <a class="dropdown-item" href="#" value="75">75 - Paris</a>
+                                <a class="dropdown-item" href="#" value="76">76 - Seine-Maritime</a>
+                                <a class="dropdown-item" href="#" value="77">77 - Seine-et-Marne</a>
+                                <a class="dropdown-item" href="#" value="78">78 - Yvelines</a>
+                                <a class="dropdown-item" href="#" value="79">79 - Deux-Sèvres</a>
+                                <a class="dropdown-item" href="#" value="80">80 - Somme</a>
+                                <a class="dropdown-item" href="#" value="81">81 - Tarn</a>
+                                <a class="dropdown-item" href="#" value="82">82 - Tarn-et-Garonne</a>
+                                <a class="dropdown-item" href="#" value="83">83 - Var</a>
+                                <a class="dropdown-item" href="#" value="84">84 - Vaucluse</a>
+                                <a class="dropdown-item" href="#" value="85">85 - Vendée</a>
+                                <a class="dropdown-item" href="#" value="86">86 - Vienne</a>
+                                <a class="dropdown-item" href="#" value="87">87 - Haute-Vienne</a>
+                                <a class="dropdown-item" href="#" value="88">88 - Vosges</a>
+                                <a class="dropdown-item" href="#" value="89">89 - Yonne</a>
+                                <a class="dropdown-item" href="#" value="90">90 - Territoire de Belfort</a>
+                                <a class="dropdown-item" href="#" value="91">91 - Essonne</a>
+                                <a class="dropdown-item" href="#" value="92">92 - Hauts-de-Seine</a>
+                                <a class="dropdown-item" href="#" value="93">93 - Seine-Saint-Denis</a>
+                                <a class="dropdown-item" href="#" value="94">94 - Val-de-Marne</a>
+                                <a class="dropdown-item" href="#" value="95">95 - Val-d'Oise</a>
+                                <a class="dropdown-item" href="#" value="971">971 - Guadeloupe</a>
+                                <a class="dropdown-item" href="#" value="972">972 - Martinique</a>
+                                <a class="dropdown-item" href="#" value="976">976 - Mayotte</a>
+                                <a class="dropdown-item" href="#" value="974">974 - La Réunion</a>
+                                <a class="dropdown-item" href="#" value="973">973 - Guyane</a>                        
+                            </div>
+                        </div>
+
+                        <!-- Élément pour afficher le message d'erreur -->
+                        <div class="mt-2" id="dpt_action_counter"></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-4"></div>
+
+        <div class="accordion"  id="accordionForm2">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"  aria-controls="collapseTwo">
+                        Qu'est ce qui m'intéresse ?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-parent="#accordionForm2" aria-expanded="false">
+                    <div class="accordion-body">
+
+                        <form id="filterForm">
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group" id="select_publics_form"> 
+                                        <!--Tous public, Famille, Jeune public, Séniors-->
+        
+                                        <label class="mb-2"><strong>Public ciblé :</strong></label>
+        
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="tous_public">
+                                            <label class="form-check-label" for="tout-public">Tout public</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="famille">
+                                            <label class="form-check-label" for="famille">Famille</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="jeune_public">
+                                            <label class="form-check-label" for="jeunePublic">Jeune public</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="seniors">
+                                            <label class="form-check-label" for="seniors">Séniors</label>
+                                        </div>
+        
+                                        <div id="deselect_publics" type="button" class="btn btn-light mt-2">
+                                            Tout désélectionner
+                                        </div>
+        
+                                    </div>
+
+                                    <div class="form-group" id="select_type_action_form"> 
+                                        <!--Tous public, Famille, Jeune public, Séniors-->
+        
+                                        <label class="mb-2 mt-4"><strong>Type d'action :</strong></label>
+                                        
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="atelier_jeux">
+                                            <label class="form-check-label" for="atelier_jeux">Atelier avec jeux</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="atelier_sensibilisation">
+                                            <label class="form-check-label" for="atelier_sensibilisation">Atelier de sensibilisation</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="conference">
+                                            <label class="form-check-label" for="conference">Conférence</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="exercice_de_gestion_de_crise">
+                                            <label class="form-check-label" for="exercice_de_gestion_de_crise">Exercice de gestion de crise</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="exposition">
+                                            <label class="form-check-label" for="exposition">Exposition</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="formation">
+                                            <label class="form-check-label" for="formation">Formation</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="reunion_d_information">
+                                            <label class="form-check-label" for="reunion_d_information">Réunion d'information</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="spectacle">
+                                            <label class="form-check-label" for="spectacle">Spectacle</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="visite_en_plein_air">
+                                            <label class="form-check-label" for="visite_en_plein_air">Visite en plein air</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="visite_en_interieur">
+                                            <label class="form-check-label" for="visite_en_interieur">Visite en intérieur</label>
+                                        </div>
+
+                                        
+                                        <div id="deselect_type_action" type="button" class="btn btn-light mt-2 mb-3">
+                                            Tout désélectionner
+                                        </div>
+        
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group mb-3"  id="select_risques_form">
+        
+                                        <label class="mb-2"><strong>Risques traités :</strong> </label>
+        
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="inondations">
+                                            <label class="form-check-label" for="inondations">Inondations</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="feux_de_foret">
+                                            <label class="form-check-label" for="feux_de_foret">Feux de forêt</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="tempete_cyclone">
+                                            <label class="form-check-label" for="tempete_cyclone">Tempête/cyclone</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="seisme">
+                                            <label class="form-check-label" for="seisme">Séisme</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="eruption_volcanique">
+                                            <label class="form-check-label" for="eruption_volcanique">Éruption volcanique</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="mouvement_de_terrain">
+                                            <label class="form-check-label" for="mouvement_de_terrain">Mouvement de terrain</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="risques_littoraux">
+                                            <label class="form-check-label" for="risques_littoraux">Risques littoraux</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="avalanche">
+                                            <label class="form-check-label" for="avalanche">Avalanche</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="radon">
+                                            <label class="form-check-label" for="radon">Radon</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="accidents_industriels">
+                                            <label class="form-check-label" for="accidents_industriels">Accidents industriels</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="accidents_nucleaires">
+                                            <label class="form-check-label" for="accidents_nucleaires">Accidents nucléaires</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="rupture_de_barrage">
+                                            <label class="form-check-label" for="rupture_de_barrage">Rupture de barrage</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="transport_de_matieres_dangereuses">
+                                            <label class="form-check-label" for="transport_de_matieres_dangereuses">Transport de matières dangereuses</label>
+                                        </div>
+        
+                                        <div id="deselect_risques" type="button" class="btn btn-light mt-2">
+                                            Tout désélectionner
+                                        </div>
+        
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group" id="display_public_restreint_form">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="display_public_restreint">
+                                            <label class="form-check-label" for="display_public_restreint">Afficher également les actions non ouvertes au grand public.</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                
+
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filtrer les actions affichées</button>
+                        </form>
+        
+                        <div class="mt-2" id="filter_action_counter"></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Actions dématerialisées
+        <h3 class="mt-4" id="actions_demat_header">Actions dématerialisées</h3>
+        <div id="actions_demat"></div> -->
+
+    </div>
+
+    <!-- Inclusion du fichier JavaScript de gestion de la carte-->
+    <script src="script_map.js"></script>
+
+</body>
+</html>
