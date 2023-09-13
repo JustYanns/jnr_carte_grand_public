@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte interactive</title>
+    <title>Carte interactive journée nationale de la résilience</title>
     
     <!-- Liens vers les bibliothèques Bootstrap, Leaflet et jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -104,30 +104,29 @@
 
 
         <div class="row mt-3">
-            <div class="col-4">
-                Zone d'affichage : 
-            </div>
-            <div class="col">
-                <select id="selectRegion" class="form-control">
-                    <option value="metropole">Hexagone / Corse</option>
-                    <option value="guadeloupe">Guadeloupe</option>
-                    <option value="martinique">Martinique</option>
-                    <option value="guyane">Guyane</option>
-                    <option value="la_reunion">La Réunion</option>
-                    <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
-                    <option value="mayotte">Mayotte</option>
-                    <option value="saint_barthelemy">Saint-Barthélemy</option>
-                    <option value="saint_martin">Saint-Martin</option>
-                    <option value="wallis_et_futuna">Wallis-et-Futuna</option>
-                    <option value="polynesie_française">Polynésie française</option>
-                    <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
-                </select>
-            </div>
+            <h4>Zone d'affichage : </h4>
+        
+            <select id="selectRegion" class="form-control">
+                <option value="metropole">Hexagone / Corse</option>
+                <option value="guadeloupe">Guadeloupe</option>
+                <option value="martinique">Martinique</option>
+                <option value="guyane">Guyane</option>
+                <option value="la_reunion">La Réunion</option>
+                <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
+                <option value="mayotte">Mayotte</option>
+                <option value="saint_barthelemy">Saint-Barthélemy</option>
+                <option value="saint_martin">Saint-Martin</option>
+                <option value="wallis_et_futuna">Wallis-et-Futuna</option>
+                <option value="polynesie_française">Polynésie française</option>
+                <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
+            </select>
         </div>
 
         <!-- Choix localisation / filtres -->
 
-        <div class="accordion mt-4"  id="accordionForm1">
+        <h4 class="mt-4">Filtrer les actions selon leur localisation : </h4>
+
+        <div class="accordion"  id="accordionForm1">
 
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -290,6 +289,8 @@
         </div>
 
         <div class="row mt-4"></div>
+
+        <h4 >Filtrer les actions selon leur forme et leur contenu : </h4>
 
         <div class="accordion"  id="accordionForm2">
 
@@ -483,7 +484,7 @@
                             <button type="submit" class="btn btn-primary">Filtrer les actions affichées</button>
                         </form>
         
-                        <div class="mt-2" id="filter_action_counter"></div>
+                        <div class="mt-3" id="filter_action_counter"></div>
 
                     </div>
                 </div>

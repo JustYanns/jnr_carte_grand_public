@@ -384,7 +384,7 @@ $(document).ready(function () {
 
             // Affichage des actions dématerialisées
             data = filter_column(csvData.data, "est_dematerialisee");
-            // display_dematerialized_actions(data);
+                // display_dematerialized_actions(data);
 
 
             // Décompte des actions
@@ -570,14 +570,9 @@ $(document).ready(function () {
         // Mise à joue de l'extent de la carte
         centerMap(map, latitude, longitude, distance);
 
-        // Affichage de l'adresse entrée par l'utilisateur
-        const myPosition_marker = L.AwesomeMarkers.icon({
-            icon: 'coffee',
-            markerColor: 'black'
-          });        
+        // On scroll pour se ramener sur la carte
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
 
-        // var marker = L.marker([latitude, longitude],{icon: myPosition_marker});
-        // map.addLayer(marker);
         
         // Mise à jour des statistiques départementales
         // update_plot_nb_actions(dpt_code);
@@ -616,6 +611,10 @@ $(document).ready(function () {
         // Mettre à jour le volet stats départementales
         // update_plot_nb_actions(dpt_code);
         // update_dpt_button(dpt_code);
+
+        // On scroll pour se ramener sur la carte
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
+
         
 
     });
