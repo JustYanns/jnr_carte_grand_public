@@ -176,6 +176,16 @@ function filtrer_dpt(data, dpt_code) {
     return data;
 }
 
+// Function to filter based on zone_geo_projet
+function filtrer_zone_geo(data, zone_geo) {
+
+    data = data.filter(function(i) {
+        return i.zone_geo_projet == zone_geo;
+    });
+
+    return data;
+}
+
 // function to count number of true values
 function count_true(data, col_name) {
 
@@ -286,7 +296,7 @@ function display_dematerialized_actions(data) {
     var thead = $("<thead>");
     var headerRow = $("<tr>");
 
-    ["Nom de l'action", "Organisateur", "Lien vers la ressource"].forEach(function(item) {
+    ["Nom de l'action", "Organisateur", "Type d'action", "Lien vers la ressource"].forEach(function(item) {
         var th = $("<th>").text(item);
         headerRow.append(th);
     }) 
@@ -302,7 +312,7 @@ function display_dematerialized_actions(data) {
         if (item["lien_programme"]) {
             var row = $("<tr>");
 
-            $.each(["nom","organisateur"], function (index, label) {
+            $.each(["nom","organisateur","type_action_str"], function (index, label) {
                 var cell = $("<td>").text(item[label]);
                 row.append(cell);
             });
@@ -317,8 +327,20 @@ function display_dematerialized_actions(data) {
 
     table.append(tbody);
 
-    tableContainer.append(table)
+    tableContainer.html(table)
 
+}
+
+function display_dematerialized_actions_zone_geo(zone_geo){
+
+    // Que actions dématerialisées
+    var data = filter_column(csvData.data, "est_dematerialisee", on_true=true);
+
+    // Que action dans la zone geo 
+    data = filtrer_zone_geo(data, zone_geo);
+
+    // Display actions in table
+    display_dematerialized_actions(data);
 }
 
 
@@ -345,6 +367,9 @@ $(document).ready(function () {
             var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
             var date_cols = ["date_debut", "date_fin"]
             var str_cols = ["insee_dep"]
+
+            // Liste des champs de zones géographiques
+            zones_geo_labels = []
 
             var dateString, dateParts;
             
@@ -374,8 +399,13 @@ $(document).ready(function () {
                         row["lien_programme"] = "http://" + row["lien_programme"];
                     }
                 }
+
+                // zone geo
+                if (row["est_dematerialisee"] && row["lien_programme"]) {
+                    zones_geo_labels.push(row["zone_geo_projet"]);
+                }
+
                 
-    
             });
 
             // Restreindre aux actions grand public
@@ -420,7 +450,25 @@ $(document).ready(function () {
             nb_actions_total = csvData.data.length;
             $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
             $("#action_count_detail").html(`Dont <strong>${nb_actions}</strong> actions non dématerialisées ouvertes au grand public`)
-            
+
+            // Zones géographiques 
+
+            function onlyUnique(value, index, array) {
+                return array.indexOf(value) === index;
+            }
+
+            // Renseignement des champs pour le menu déroulant
+            var selectZoneGeoActionsDemat = $("#selectZoneGeoActionsDemat");
+            zones_geo_labels.unshift("971-GUADELOUPE")
+            zones_geo_labels = zones_geo_labels.filter(onlyUnique);
+            for (var i = 0; i < zones_geo_labels.length; i++) {
+                var option = $("<option>");
+                option.text(zones_geo_labels[i]);
+                selectZoneGeoActionsDemat.append(option);
+            }
+
+            display_dematerialized_actions_zone_geo(zones_geo_labels[0]);
+        
         }
     });
 
@@ -640,8 +688,6 @@ $(document).ready(function () {
         // On scroll pour se ramener sur la carte
         $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
 
-
-
     });
 
     // form de filtrage des actions
@@ -702,9 +748,7 @@ $(document).ready(function () {
         }
 
         // On scroll pour se ramener sur la carte
-        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
-
-        
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");        
 
     }
 
@@ -742,6 +786,14 @@ $(document).ready(function () {
         if (event.which === 13) {
             $("#select_type_action_form input[type='checkbox']").prop("checked", false);
         }
+    });
+
+    // Menu déroulant choix de zone géographique pour actions dématerialisées
+    $('#selectZoneGeoActionsDemat').change(function() {
+        var zone_geo= $(this).val();
+        console.log(zone_geo);
+        // display_dematerialized_actions(csvData.data);
+        display_dematerialized_actions_zone_geo(zone_geo);
     });
 
 
