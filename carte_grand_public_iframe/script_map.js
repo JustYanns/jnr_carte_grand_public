@@ -15,29 +15,49 @@ const date_JNR = new Date(2023, 10, 13)
 const date_today = new Date();
 
 // Création des markers
-const riskNat_marker = L.AwesomeMarkers.icon({
-    markerColor: 'green'
-});
 
-const riskTEch_marker = L.AwesomeMarkers.icon({
-    markerColor: 'red'
-});
+const riskNat_marker = L.icon({
+    iconUrl : "./icons/map_marker_nat.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskMult_marker = L.AwesomeMarkers.icon({
-    markerColor: 'blue'
-});
+const riskTEch_marker = L.icon({
+    iconUrl : "./icons/map_marker_techno.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskNat_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightgreen'
-});
+const riskMult_marker = L.icon({
+    iconUrl : "./icons/map_marker_mixte.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskTEch_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightred'
-});
+const riskNat_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_nat.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskMult_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightblue'
-});
+const riskTEch_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_techno.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+const riskMult_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_mixte.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+
+
 
 // Function for filter the list returned by papa parse : intersection
 function filter_column(data, col_name, on_true=true) {
@@ -186,7 +206,8 @@ function plot_actions_markers(data) {
         var lon = item.lon;
 
         // Vérification si les coordonnées sont valides (pas NaN) et que date fin > date du jour
-        if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
+        // if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
+        if (!isNaN(lat) && !isNaN(lon) && !isNaN(item.date_debut) && !isNaN(item.date_fin)) {
 
             nb_actions += 1;
 
@@ -200,13 +221,20 @@ function plot_actions_markers(data) {
 
             if (item.date_debut.getTime() === item.date_fin.getTime()) {
                 if (item.date_debut.getTime() === date_JNR.getTime()) {
-                    popupContent += "Le 13/10/2023, Journée nationale de la résilience" + '<br>'
+                    popupContent += "Le 13/10/2023, Journée nationale de la résilience"
                 } else {
-                    popupContent += "Le " + dateFormatter.format(item.date_debut) + '<br>'
+                    popupContent += "Le " + dateFormatter.format(item.date_debut)
                 }
             } else {
-                popupContent += 'Du ' + dateFormatter.format(item.date_debut) + ' au ' + dateFormatter.format(item.date_fin) + '<br>'
+                popupContent += 'Du ' + dateFormatter.format(item.date_debut) + ' au ' + dateFormatter.format(item.date_fin)
             }
+
+            // action passée
+            if ((item.date_fin.getTime() < date_today.getTime())) {
+                popupContent += '<span style="color:red"> (Action passée)</span>'
+                // popupContent += ' (Action passée)'
+            }
+            popupContent += "</br>"
             
             popupContent += '<strong>Organisé par :</strong> ' + item.organisateur + '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
             
@@ -316,6 +344,7 @@ $(document).ready(function () {
             var float_cols = ["lat","lon"]
             var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
             var date_cols = ["date_debut", "date_fin"]
+            var str_cols = ["insee_dep"]
 
             var dateString, dateParts;
             
@@ -363,9 +392,9 @@ $(document).ready(function () {
                 var div = L.DomUtil.create('div', 'info legend');
                 labels = ['<strong>Risques abordés</strong>'],
 
-                labels.push('<span style="color:#38a9dd">◼</span> Multirisques');
-                labels.push('<span style="color:#72b026">◼</span> Risques naturels');
-                labels.push('<span style="color:#d33d2a">◼</span> Risques technologiques');
+                labels.push('<span style="color:#38a9dd">◼</span> (N/T) Multirisques');
+                labels.push('<span style="color:#72b026">◼</span> (N) Risques naturels');
+                labels.push('<span style="color:#d33d2a">◼</span> (T) Risques technologiques');
 
                 // labels.push('<i class="bi bi-circle-fill" style="color:#38a9dd"></i> Multirisques');
                 // labels.push('<i class="bi bi-circle-fill" style="color:#72b026"></i> Risques naturels');
@@ -515,7 +544,7 @@ $(document).ready(function () {
         }
     }
 
-    // Fonction pour gérer la soumission du formulaire
+    // Fonction pour gérer la soumission du formulaire adresse 
     async function onSubmitForm(event) {
 
         event.preventDefault();
@@ -546,7 +575,6 @@ $(document).ready(function () {
 
         try {
             dpt_code = await getDepartmentFromCoordinates(latitude, longitude);
-            console.log(dpt_code);
         } catch (error) {
             console.error("Erreur :", error.message);
             document.getElementById('error-message').innerText = "L'adresse entrée apparaît en dehors du territoire français";
@@ -561,7 +589,8 @@ $(document).ready(function () {
         if (data.length === 1) {
             $("#location_action_counter").html(`Une action dans ce périmètre`);
         } else if (data.length > 1) {
-            $("#location_action_counter").html(`${data.lenght} actions trouvées dans ce périmètre`);
+
+            $("#location_action_counter").html(`${data.length} actions trouvées dans ce périmètre`);
         } else {
             $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
         }
@@ -583,20 +612,16 @@ $(document).ready(function () {
     document.getElementById('locationForm').addEventListener('submit', onSubmitForm);
 
     // Menu déroulant choix de département
-    $("#dpt-dropdown .dropdown-item").on("click", function(e) {
+    $('#selectDepartement').change(function() {
 
-        e.preventDefault();
-
-        // On récupère le dpt sélectionné
-        var dpt_code = $(this).attr("value");
-        
+        var dpt_code = $(this).val();
 
         // On filtre les actions
         data = filtrer_dpt(csvData.data, dpt_code);
 
         // MAJ message
         $("#dpt_action_counter").html()
-        if (data.lenght === 1) {
+        if (data.length === 1) {
             $("#dpt_action_counter").html(`Une action dans le ${dpt_code}`);
         } else if (data.length > 1) {   
             $("#dpt_action_counter").html(`${data.length} actions dans le ${dpt_code}`);
@@ -615,10 +640,9 @@ $(document).ready(function () {
         // On scroll pour se ramener sur la carte
         $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
 
-        
+
 
     });
-
 
     // form de filtrage des actions
     async function onSubmitFilterForm(event) {
@@ -700,5 +724,25 @@ $(document).ready(function () {
     $("#deselect_type_action").click(function() {
         $("#select_type_action_form input[type='checkbox']").prop("checked", false);
     });
+
+    // activation sur touche entrer
+    $("#deselect_risques").keypress(function() {
+        if (event.which === 13) {
+            $("#select_risques_form input[type='checkbox']").prop("checked", false);
+        }            
+    });
+
+    $("#deselect_publics").keypress(function() {
+        if (event.which === 13) {
+            $("#select_publics_form input[type='checkbox']").prop("checked", false);
+        }
+    });
+
+    $("#deselect_type_action").keypress(function() {
+        if (event.which === 13) {
+            $("#select_type_action_form input[type='checkbox']").prop("checked", false);
+        }
+    });
+
 
 });

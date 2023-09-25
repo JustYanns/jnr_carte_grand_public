@@ -306,7 +306,7 @@ $(document).ready(function () {
 
     // Chargement du fichier CSV
     $.ajax({
-        url: 'data/actions_grand_public_carte.csv',
+        url: 'data/actions_grand_public_carte_3.csv',
         dataType: 'text',
         success: function (data) {
 
