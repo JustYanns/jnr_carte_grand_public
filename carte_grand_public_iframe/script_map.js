@@ -5,14 +5,22 @@ var csvData;
 var map;
 var markers = L.markerClusterGroup();
 
+// global variables for action table
+var plottedData = [];
+var geoFilter;
+var catActionFilter = "";
+
 var OSM_dpt_data;
 
 var select_all_risque = true;
 var select_all_public = true;
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+const dateFormatterCompact = new Intl.DateTimeFormat('fr-FR');
 const date_JNR = new Date(2023, 10, 13)
 const date_today = new Date();
+
+var zoomCircle;
 
 // Création des markers
 
@@ -209,6 +217,9 @@ function plot_actions_markers(data) {
     // effacement des marqueurs précédents
     markers.clearLayers()
 
+    // effacer liste des marqueurs plttés
+    plottedData = [];
+
     // Parcours des données et création des marqueurs
     data.forEach(function (item) {
 
@@ -219,6 +230,20 @@ function plot_actions_markers(data) {
         // if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
         if (!isNaN(lat) && !isNaN(lon) && !isNaN(item.date_debut) && !isNaN(item.date_fin)) {
 
+            plottedData.push({
+                "nom" : item.nom,
+                "organisateur" : item.organisateur,
+                "type_action_str" : item.type_action_str ,
+                "public_cible_str" : item.public_cible_str ,
+                "adresse" : item.adresse ,
+                "date_debut" : dateFormatterCompact.format(item.date_debut) ,
+                "date_fin" : dateFormatterCompact.format(item.date_fin),
+                "lien_programme" : item.lien_programme,
+                "lon" : item.lon ,
+                "lat" : item.lat ,
+                "insee_dep" : item.insee_dep
+            })
+
             nb_actions += 1;
 
             var description = item.description_action;
@@ -227,7 +252,12 @@ function plot_actions_markers(data) {
                 description = description.slice(0,NB_MAX_CHAR) + "..."
             }
 
-            var popupContent = '<strong>' + item.nom + '</strong><br><em>' + item.adresse + '</em><br>'
+            var popupContent;
+            if (item.est_grand_public){
+                popupContent = '<strong>' + item.nom + '</strong><br><em>' + item.adresse + '</em><br>'
+            } else {
+                popupContent = '<strong>' + item.nom + '</strong><br><span style="color:red"> (Action non ouverte au grand public)</span><br><em>' + item.adresse + '</em><br>'
+            }
 
             if (item.date_debut.getTime() === item.date_fin.getTime()) {
                 if (item.date_debut.getTime() === date_JNR.getTime()) {
@@ -240,6 +270,10 @@ function plot_actions_markers(data) {
             }
 
             // action passée
+
+            // console.log(item.date_fin.getTime());
+            // console.log(date_today.getTime());
+
             if ((item.date_fin.getTime() < date_today.getTime())) {
                 popupContent += '<span style="color:red"> (Action passée)</span>'
                 // popupContent += ' (Action passée)'
@@ -273,8 +307,6 @@ function plot_actions_markers(data) {
                 }
             }
 
-            
-
             markers.addLayer(marker);
 
         }
@@ -282,16 +314,95 @@ function plot_actions_markers(data) {
 
     map.addLayer(markers); // Ajout des marqueurs à la carte
 
+    // affichage des marqueurs dans un tableau si demandé
+    const dispActionsTable = $('#displayActionTable');
+    if (dispActionsTable[0].checked) {
+        fillMapTableActions();
+    }
+
     return nb_actions;
 
 };
 
+function fillMapTableActions() {
 
-function display_dematerialized_actions(data) {
+    console.log(plottedData);
+    console.log(geoFilter);
 
-    tableContainer = $("#actions_demat");
+    if (catActionFilter.startsWith(" - ")){ 
+        catActionFilter.substring(3);
+    }
+
+    // filtrage géographique si nécessaire
+    if (geoFilter) {
+        if (geoFilter["type"] === "departement") {
+
+            data = filtrer_dpt(plottedData, geoFilter["dpt_code"]);
+            catActionFilter = "Département " + geoFilter["dpt_code"] + " - " + catActionFilter;
+
+        } else if (geoFilter["type"] === "coord_dist") {
+
+            data = filter_distance(plottedData, geoFilter["lat"], geoFilter["lon"], geoFilter["distance"]);
+            catActionFilter = geoFilter["distance"]/1000 + "km de " + geoFilter["adresse"] + " - " + catActionFilter;
+
+        } 
+    } else {
+        console.log("Action table : no filter")
+        data = plottedData;
+    }
+
+    // display it in table
+    tableContainer = $("#mapActionTable");
+    display_actions_table(data, tableContainer);
+
+    // indicate filters
+    $("#filter_state_table").empty();
+    $("#filter_state_table").html(catActionFilter);
+
+};
+
+function display_actions_table(data, tableContainer) {
     
-    var table = $("<table>").addClass("table table-bordered");
+    var table = $("<table>").addClass("table table-bordered table-striped");
+
+    var thead = $("<thead>");
+    var headerRow = $("<tr>");
+
+
+    ["Nom de l'action", "Organisateur", "Type d'action", "Public ciblé", "Adresse", "Date de début", "Date de fin", "Ressource externe"].forEach(function(item) {
+        var th = $("<th>").text(item);
+        headerRow.append(th);
+    }) 
+
+    thead.append(headerRow);
+    table.append(thead);
+
+    // Corps du tableau
+    var tbody = $("<tbody>");
+
+    $.each(data, function (index, item) {
+
+        var row = $("<tr>");
+
+        $.each(["nom","organisateur","type_action_str","public_cible_str","adresse","date_debut","date_fin","lien_programme"], function (index, label) {
+            var cell = $("<td>").text(item[label]);
+            row.append(cell);
+        });
+    
+        tbody.append(row);
+
+    });
+
+    table.append(tbody);
+
+    tableContainer.html(table)
+
+}
+
+
+function display_actions_table_demat(data, tableContainer) {
+    
+    var table = $("<table>").addClass("table table-bordered table-striped");
 
     var thead = $("<thead>");
     var headerRow = $("<tr>");
@@ -340,7 +451,8 @@ function display_dematerialized_actions_zone_geo(zone_geo){
     data = filtrer_zone_geo(data, zone_geo);
 
     // Display actions in table
-    display_dematerialized_actions(data);
+    tableContainer = $("#actions_demat");
+    display_actions_table_demat(data, tableContainer);
 }
 
 
@@ -443,12 +555,12 @@ $(document).ready(function () {
 
             // Affichage des actions dématerialisées
             data = filter_column(csvData.data, "est_dematerialisee");
-                // display_dematerialized_actions(data);
-
+            // display_dematerialized_actions(data);
 
             // Décompte des actions
             nb_actions_total = csvData.data.length;
-            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
+            // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
+            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment <span style="color:red"> (comprend aussi les projets non acceptés)</span>`)
             $("#action_count_detail").html(`Dont <strong>${nb_actions}</strong> actions non dématerialisées ouvertes au grand public`)
 
             // Zones géographiques 
@@ -502,6 +614,18 @@ $(document).ready(function () {
         var zoom_data = zoom_center_areas[$(this).val()];
         map.setView(zoom_data["coords"], zoom_data["zoom"]);
 
+    });
+
+    displayActionTable = $("#displayActionTable");
+    displayActionTable.change(function() {
+        console.log("here");
+        if (displayActionTable[0].checked) {
+            fillMapTableActions();
+        } else {
+            tableContainer = $("#mapActionTable");
+            tableContainer.empty();
+            $("#filter_state_table").empty();
+        }
     });
 
     // Fonction retournant les coordonnées lat lon à partir d'une adresse
@@ -578,6 +702,23 @@ $(document).ready(function () {
         // console.log(`Centering map on lat=${latitude} lon=${longitude} (distance=${distance}) `);
         map.setView([latitude, longitude], getZoomLevel(distance));
     }
+
+    // Fonction pour afficher un cercle de la fenêtre concernée
+    function addCircle(map, lat, lon , dist) {
+
+        if (zoomCircle) {
+            zoomCircle.remove();
+        }
+
+        zoomCircle = L.circle([lat, lon], {
+            color: 'red', // Couleur du cercle
+            fillColor: 'red', // Couleur de remplissage du cercle
+            fillOpacity: 0.1, // Opacité du remplissage
+            radius: dist // Convertir le rayon en mètres
+        })
+        
+        zoomCircle.addTo(map);
+    }
     
     // Fonction pour calculer le niveau de zoom en fonction de la distance choisie
     function getZoomLevel(distance) {
@@ -630,26 +771,53 @@ $(document).ready(function () {
         }
 
         // Filtre des actions à afficher
-        data = filter_distance(csvData.data, latitude, longitude, distance);
-
-        // On replot les marqueurs
-        $("#location_action_counter").html();
-        if (data.length === 1) {
-            $("#location_action_counter").html(`Une action dans ce périmètre`);
-        } else if (data.length > 1) {
-
-            $("#location_action_counter").html(`${data.length} actions trouvées dans ce périmètre`);
+        const dispPublicRestreint = $('#display_public_restreint_form input[type="checkbox"]');
+        if (dispPublicRestreint[0].checked) {
+            data = csvData.data;
         } else {
-            $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+            data = filter_column(csvData.data, "est_grand_public", on_true=true);
         }
+
+        data = filter_distance(data, latitude, longitude, distance);
+
+        // Stockage de l'info sur le filtre utilisé
+        geoFilter = {
+            "type" : "coord_dist",
+            "lat" : latitude,
+            "lon" : longitude,
+            "adresse" : address,
+            "distance" : distance
+        }
+
+        // // On replot les marqueurs
+        $("#location_action_counter").empty();
+        // if (data.length === 1) {
+        //     $("#location_action_counter").html(`Une action dans ce périmètre`);
+        // } else if (data.length > 1) {
+
+        //     $("#location_action_counter").html(`${data.length} actions trouvées dans ce périmètre`);
+        // } else {
+        //     $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+        // }
+        // if (data.length === 0) {
+        //     $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+        // }
         
         
         // Mise à joue de l'extent de la carte
         centerMap(map, latitude, longitude, distance);
 
+        // Dessin d'un cercle
+        addCircle(map, latitude, longitude , distance);
+
         // On scroll pour se ramener sur la carte
         $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
 
+        // On remplit le tableau des actions si nécesaire
+        const dispActionsTable = $('#displayActionTable');
+        if (dispActionsTable[0].checked) {
+            fillMapTableActions();
+        }
         
         // Mise à jour des statistiques départementales
         // update_plot_nb_actions(dpt_code);
@@ -667,15 +835,24 @@ $(document).ready(function () {
         // On filtre les actions
         data = filtrer_dpt(csvData.data, dpt_code);
 
-        // MAJ message
-        $("#dpt_action_counter").html()
-        if (data.length === 1) {
-            $("#dpt_action_counter").html(`Une action dans le ${dpt_code}`);
-        } else if (data.length > 1) {   
-            $("#dpt_action_counter").html(`${data.length} actions dans le ${dpt_code}`);
-        } else {
-            $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // Stockage de l'info sur le filtre utilisé
+        geoFilter = {
+            "type" : "departement",
+            "dpt_code" : dpt_code
         }
+
+        // MAJ message
+        $("#dpt_action_counter").empty()
+        // if (data.length === 1) {
+        //     $("#dpt_action_counter").html(`Une action dans le ${dpt_code}`);
+        // } else if (data.length > 1) {   
+        //     $("#dpt_action_counter").html(`${data.length} actions dans le ${dpt_code}`);
+        // } else {
+        //     $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // }
+        // if (data.length === 0) {
+        //     $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // }
 
         zoom_info = OSM_dpt_data[dpt_code];
 
@@ -688,12 +865,25 @@ $(document).ready(function () {
         // On scroll pour se ramener sur la carte
         $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
 
+        const dispActionsTable = $('#displayActionTable');
+        if (dispActionsTable[0].checked) {
+            fillMapTableActions();
+        }
+
+        // Effacer le cercle de recherche par adresse si dessiné
+        if (zoomCircle) {
+            zoomCircle.remove();
+        }
+
+
     });
 
     // form de filtrage des actions
     async function onSubmitFilterForm(event) {
 
         event.preventDefault();
+
+        catActionFilter = '';
 
         var data;
 
@@ -702,7 +892,10 @@ $(document).ready(function () {
         const checkboxList_risques = $('#select_risques_form input[type="checkbox"]');
         checkboxList_risques.each(function() {
             if (this.checked) {
-                risques_to_filter_on.push(`est_${this.id}`)
+                risques_to_filter_on.push(`est_${this.id}`);
+                console.log(this.id);
+                console.log($("label[for='"+this.id+"']").html());
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
 
@@ -710,7 +903,8 @@ $(document).ready(function () {
         const checkboxList_publics = $('#select_publics_form input[type="checkbox"]');
         checkboxList_publics.each(function() {
             if (this.checked) {
-                publics_to_filter_on.push(`est_${this.id}`)
+                publics_to_filter_on.push(`est_${this.id}`);
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
 
@@ -718,9 +912,14 @@ $(document).ready(function () {
         const checkboxList_type_action = $('#select_type_action_form input[type="checkbox"]');
         checkboxList_type_action.each(function() {
             if (this.checked) {
-                type_action_to_filter_on.push(`est_${this.id}`)
+                type_action_to_filter_on.push(`est_${this.id}`);
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
+
+        if (catActionFilter != 0){ 
+            catActionFilter = catActionFilter.slice(3);
+        }
 
         // On filtre les données
 
@@ -733,6 +932,7 @@ $(document).ready(function () {
         } else {
             console.log("Also displaying public restreint actions");
             data = csvData.data;
+            catActionFilter = "Action grand public et public restreint - " + catActionFilter;
         };
 
         data = filter_risque_public_type_action(data, risques_to_filter_on, publics_to_filter_on, type_action_to_filter_on);

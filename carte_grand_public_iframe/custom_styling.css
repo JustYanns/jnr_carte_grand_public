@@ -48,3 +48,7 @@ body {
     border-color: #df4a4a;
     box-shadow: 0 0 0 3px rgba(255, 54, 54, 0.6);
 }
+
+.contentIntensiveTable {
+    font-size: 10px; /* Vous pouvez ajuster la taille en fonction de vos besoins */
+}
