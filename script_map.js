@@ -5,39 +5,67 @@ var csvData;
 var map;
 var markers = L.markerClusterGroup();
 
+// global variables for action table
+var plottedData = [];
+var geoFilter;
+var catActionFilter = "";
+
 var OSM_dpt_data;
 
 var select_all_risque = true;
 var select_all_public = true;
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+const dateFormatterCompact = new Intl.DateTimeFormat('fr-FR');
 const date_JNR = new Date(2023, 10, 13)
 const date_today = new Date();
 
+var zoomCircle;
+
 // Création des markers
-const riskNat_marker = L.AwesomeMarkers.icon({
-    markerColor: 'green'
-});
 
-const riskTEch_marker = L.AwesomeMarkers.icon({
-    markerColor: 'red'
-});
+const riskNat_marker = L.icon({
+    iconUrl : "./icons/map_marker_nat.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskMult_marker = L.AwesomeMarkers.icon({
-    markerColor: 'blue'
-});
+const riskTEch_marker = L.icon({
+    iconUrl : "./icons/map_marker_techno.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskNat_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightgreen'
-});
+const riskMult_marker = L.icon({
+    iconUrl : "./icons/map_marker_mixte.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskTEch_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightred'
-});
+const riskNat_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_nat.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
 
-const riskMult_marker_b = L.AwesomeMarkers.icon({
-    markerColor: 'lightblue'
-});
+const riskTEch_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_techno.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+const riskMult_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_mixte.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+
+
 
 // Function for filter the list returned by papa parse : intersection
 function filter_column(data, col_name, on_true=true) {
@@ -156,6 +184,16 @@ function filtrer_dpt(data, dpt_code) {
     return data;
 }
 
+// Function to filter based on zone_geo_projet
+function filtrer_zone_geo(data, zone_geo) {
+
+    data = data.filter(function(i) {
+        return i.zone_geo_projet == zone_geo;
+    });
+
+    return data;
+}
+
 // function to count number of true values
 function count_true(data, col_name) {
 
@@ -171,6 +209,16 @@ function count_true(data, col_name) {
     return counter;
 }
 
+function filter_passed_date(data) {
+
+    data = data.filter(function(i) {
+        return i.date_fin.getTime() > date_today.getTime();
+    });
+
+    return data;
+
+}
+
 // function for plotting markers
 function plot_actions_markers(data) {
 
@@ -179,6 +227,9 @@ function plot_actions_markers(data) {
     // effacement des marqueurs précédents
     markers.clearLayers()
 
+    // effacer liste des marqueurs plttés
+    plottedData = [];
+
     // Parcours des données et création des marqueurs
     data.forEach(function (item) {
 
@@ -186,7 +237,23 @@ function plot_actions_markers(data) {
         var lon = item.lon;
 
         // Vérification si les coordonnées sont valides (pas NaN) et que date fin > date du jour
-        if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
+        // if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
+        if (!isNaN(lat) && !isNaN(lon) && !isNaN(item.date_debut) && !isNaN(item.date_fin)) {
+
+            plottedData.push({
+                "nom" : item.nom,
+                "organisateur" : item.organisateur,
+                "type_action_str" : item.type_action_str ,
+                "public_cible_str" : item.public_cible_str ,
+                "risque_cible_str" : item.risque_cible_str,
+                "adresse" : item.adresse ,
+                "date_debut" : dateFormatterCompact.format(item.date_debut) ,
+                "date_fin" : dateFormatterCompact.format(item.date_fin),
+                "lien_programme" : item.lien_programme,
+                "lon" : item.lon ,
+                "lat" : item.lat ,
+                "insee_dep" : item.insee_dep
+            })
 
             nb_actions += 1;
 
@@ -196,23 +263,39 @@ function plot_actions_markers(data) {
                 description = description.slice(0,NB_MAX_CHAR) + "..."
             }
 
-            var popupContent = '<strong>' + item.nom + '</strong><br><em>' + item.adresse + '</em><br>'
+            var popupContent;
+            if (item.est_grand_public){
+                popupContent = '<strong>' + item.nom + '</strong><br><em>' + item.adresse + '</em><br>'
+            } else {
+                popupContent = '<strong>' + item.nom + '</strong><br><span style="color:red"> (Action non ouverte au grand public)</span><br><em>' + item.adresse + '</em><br>'
+            }
 
             if (item.date_debut.getTime() === item.date_fin.getTime()) {
                 if (item.date_debut.getTime() === date_JNR.getTime()) {
-                    popupContent += "Le 13/10/2023, Journée nationale de la résilience" + '<br>'
+                    popupContent += "Le 13/10/2023, Journée nationale de la résilience"
                 } else {
-                    popupContent += "Le " + dateFormatter.format(item.date_debut) + '<br>'
+                    popupContent += "Le " + dateFormatter.format(item.date_debut)
                 }
             } else {
-                popupContent += 'Du ' + dateFormatter.format(item.date_debut) + ' au ' + dateFormatter.format(item.date_fin) + '<br>'
+                popupContent += 'Du ' + dateFormatter.format(item.date_debut) + ' au ' + dateFormatter.format(item.date_fin)
             }
+
+            // action passée
+
+            // console.log(item.date_fin.getTime());
+            // console.log(date_today.getTime());
+
+            if ((item.date_fin.getTime() < date_today.getTime())) {
+                popupContent += '<span style="color:red"> (Action passée)</span>'
+                // popupContent += ' (Action passée)'
+            }
+            popupContent += "</br>"
             
             popupContent += '<strong>Organisé par :</strong> ' + item.organisateur + '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
             
             // Lien vers plus d'information
             if (item.lien_programme) {
-                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + '>cliquez ici</a>';
+                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + ' target="_blank">cliquez ici</a>';
             } else {
                 popupContent += "<br>(Pas de ressource additionnelle fournie par l'organisateur.)";
             }
@@ -235,8 +318,6 @@ function plot_actions_markers(data) {
                 }
             }
 
-            
-
             markers.addLayer(marker);
 
         }
@@ -244,21 +325,100 @@ function plot_actions_markers(data) {
 
     map.addLayer(markers); // Ajout des marqueurs à la carte
 
+    // affichage des marqueurs dans un tableau si demandé
+    const dispActionsTable = $('#displayActionTable');
+    if (dispActionsTable[0].checked) {
+        fillMapTableActions();
+    }
+
     return nb_actions;
 
 };
 
+function fillMapTableActions() {
 
-function display_dematerialized_actions(data) {
+    console.log(plottedData);
+    console.log(geoFilter);
 
-    tableContainer = $("#actions_demat");
+    if (catActionFilter.startsWith(" - ")){ 
+        catActionFilter.substring(3);
+    }
+
+    // filtrage géographique si nécessaire
+    if (geoFilter) {
+        if (geoFilter["type"] === "departement") {
+
+            data = filtrer_dpt(plottedData, geoFilter["dpt_code"]);
+            catActionFilter = "Département " + geoFilter["dpt_code"] + " - " + catActionFilter;
+
+        } else if (geoFilter["type"] === "coord_dist") {
+
+            data = filter_distance(plottedData, geoFilter["lat"], geoFilter["lon"], geoFilter["distance"]);
+            catActionFilter = geoFilter["distance"]/1000 + "km de " + geoFilter["adresse"] + " - " + catActionFilter;
+
+        } 
+    } else {
+        console.log("Action table : no filter")
+        data = plottedData;
+    }
+
+    // display it in table
+    tableContainer = $("#mapActionTable");
+    display_actions_table(data, tableContainer);
+
+    // indicate filters
+    $("#filter_state_table").empty();
+    $("#filter_state_table").html(catActionFilter);
+
+};
+
+function display_actions_table(data, tableContainer) {
     
-    var table = $("<table>").addClass("table table-bordered");
+    var table = $("<table>").addClass("table table-bordered table-striped");
 
     var thead = $("<thead>");
     var headerRow = $("<tr>");
 
-    ["Nom de l'action", "Organisateur", "Lien vers la ressource"].forEach(function(item) {
+
+    ["Nom de l'action", "Organisateur", "Type d'action", "Public ciblé", "Risques traités", "Adresse", "Date de début", "Date de fin", "Ressource externe"].forEach(function(item) {
+        var th = $("<th>").text(item);
+        headerRow.append(th);
+    }) 
+
+    thead.append(headerRow);
+    table.append(thead);
+
+    // Corps du tableau
+    var tbody = $("<tbody>");
+
+    $.each(data, function (index, item) {
+
+        var row = $("<tr>");
+
+        $.each(["nom","organisateur","type_action_str","public_cible_str","risque_cible_str","adresse","date_debut","date_fin","lien_programme"], function (index, label) {
+            var cell = $("<td>").text(item[label]);
+            row.append(cell);
+        });
+    
+        tbody.append(row);
+
+    });
+
+    table.append(tbody);
+
+    tableContainer.html(table)
+
+}
+
+
+function display_actions_table_demat(data, tableContainer) {
+    
+    var table = $("<table>").addClass("table table-bordered table-striped");
+
+    var thead = $("<thead>");
+    var headerRow = $("<tr>");
+
+    ["Nom de l'action", "Organisateur", "Type d'action", "Lien vers la ressource"].forEach(function(item) {
         var th = $("<th>").text(item);
         headerRow.append(th);
     }) 
@@ -274,7 +434,7 @@ function display_dematerialized_actions(data) {
         if (item["lien_programme"]) {
             var row = $("<tr>");
 
-            $.each(["nom","organisateur"], function (index, label) {
+            $.each(["nom","organisateur","type_action_str"], function (index, label) {
                 var cell = $("<td>").text(item[label]);
                 row.append(cell);
             });
@@ -289,8 +449,21 @@ function display_dematerialized_actions(data) {
 
     table.append(tbody);
 
-    tableContainer.append(table)
+    tableContainer.html(table)
 
+}
+
+function display_dematerialized_actions_zone_geo(zone_geo){
+
+    // Que actions dématerialisées
+    var data = filter_column(csvData.data, "est_dematerialisee", on_true=true);
+
+    // Que action dans la zone geo 
+    data = filtrer_zone_geo(data, zone_geo);
+
+    // Display actions in table
+    tableContainer = $("#actions_demat");
+    display_actions_table_demat(data, tableContainer);
 }
 
 
@@ -306,7 +479,7 @@ $(document).ready(function () {
 
     // Chargement du fichier CSV
     $.ajax({
-        url: 'data/actions_grand_public_carte_3.csv',
+        url: 'data/actions_jnr.csv',
         dataType: 'text',
         success: function (data) {
 
@@ -316,6 +489,10 @@ $(document).ready(function () {
             var float_cols = ["lat","lon"]
             var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
             var date_cols = ["date_debut", "date_fin"]
+            var str_cols = ["insee_dep"]
+
+            // Liste des champs de zones géographiques
+            zones_geo_labels = []
 
             var dateString, dateParts;
             
@@ -345,12 +522,20 @@ $(document).ready(function () {
                         row["lien_programme"] = "http://" + row["lien_programme"];
                     }
                 }
+
+                // zone geo
+                if (row["est_dematerialisee"] && row["lien_programme"]) {
+                    zones_geo_labels.push(row["zone_geo_projet"]);
+                }
+
                 
-    
             });
 
             // Restreindre aux actions grand public
             var data = filter_column(csvData.data, "est_grand_public");
+
+            // Restreinddre aux actions futures
+            data = filter_passed_date(data);
 
             // plot des marqueurs
             var nb_actions = plot_actions_markers(data);
@@ -363,9 +548,9 @@ $(document).ready(function () {
                 var div = L.DomUtil.create('div', 'info legend');
                 labels = ['<strong>Risques abordés</strong>'],
 
-                labels.push('<span style="color:#38a9dd">◼</span> Multirisques');
-                labels.push('<span style="color:#72b026">◼</span> Risques naturels');
-                labels.push('<span style="color:#d33d2a">◼</span> Risques technologiques');
+                labels.push('<span style="color:#38a9dd">◼</span> (N/T) Multirisques');
+                labels.push('<span style="color:#72b026">◼</span> (N) Risques naturels');
+                labels.push('<span style="color:#d33d2a">◼</span> (T) Risques technologiques');
 
                 // labels.push('<i class="bi bi-circle-fill" style="color:#38a9dd"></i> Multirisques');
                 // labels.push('<i class="bi bi-circle-fill" style="color:#72b026"></i> Risques naturels');
@@ -384,14 +569,31 @@ $(document).ready(function () {
 
             // Affichage des actions dématerialisées
             data = filter_column(csvData.data, "est_dematerialisee");
-            display_dematerialized_actions(data);
-
 
             // Décompte des actions
             nb_actions_total = csvData.data.length;
-            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
-            $("#action_count_detail").html(`Dont <strong>${nb_actions}</strong> actions non dématerialisées ouvertes au grand public`)
-            
+            // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
+            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
+            $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
+
+            // Zones géographiques 
+
+            function onlyUnique(value, index, array) {
+                return array.indexOf(value) === index;
+            }
+
+            // Renseignement des champs pour le menu déroulant
+            var selectZoneGeoActionsDemat = $("#selectZoneGeoActionsDemat");
+            zones_geo_labels.unshift("971-GUADELOUPE")
+            zones_geo_labels = zones_geo_labels.filter(onlyUnique);
+            for (var i = 0; i < zones_geo_labels.length; i++) {
+                var option = $("<option>");
+                option.text(zones_geo_labels[i]);
+                selectZoneGeoActionsDemat.append(option);
+            }
+
+            display_dematerialized_actions_zone_geo(zones_geo_labels[0]);
+        
         }
     });
 
@@ -416,7 +618,7 @@ $(document).ready(function () {
         saint_barthelemy : {coords : [17.897977, -62.828982], zoom : 12},
         saint_martin : {coords : [18.075397, -63.051992], zoom : 12},
         wallis_et_futuna : {coords : [-13.845094, -177.239133], zoom : 8},
-        polynesie_française : {coords : [-12.759267, -144.227034], zoom : 7},
+        polynesie_française : {coords : [-17.711357, -149.371015], zoom : 8},
         nouvelle_caledonie : {coords : [-21.405677, 165.531372], zoom : 8}
     }
 
@@ -425,6 +627,18 @@ $(document).ready(function () {
         var zoom_data = zoom_center_areas[$(this).val()];
         map.setView(zoom_data["coords"], zoom_data["zoom"]);
 
+    });
+
+    displayActionTable = $("#displayActionTable");
+    displayActionTable.change(function() {
+        console.log("here");
+        if (displayActionTable[0].checked) {
+            fillMapTableActions();
+        } else {
+            tableContainer = $("#mapActionTable");
+            tableContainer.empty();
+            $("#filter_state_table").empty();
+        }
     });
 
     // Fonction retournant les coordonnées lat lon à partir d'une adresse
@@ -501,6 +715,23 @@ $(document).ready(function () {
         // console.log(`Centering map on lat=${latitude} lon=${longitude} (distance=${distance}) `);
         map.setView([latitude, longitude], getZoomLevel(distance));
     }
+
+    // Fonction pour afficher un cercle de la fenêtre concernée
+    function addCircle(map, lat, lon , dist) {
+
+        if (zoomCircle) {
+            zoomCircle.remove();
+        }
+
+        zoomCircle = L.circle([lat, lon], {
+            color: 'red', // Couleur du cercle
+            fillColor: 'red', // Couleur de remplissage du cercle
+            fillOpacity: 0.1, // Opacité du remplissage
+            radius: dist // Convertir le rayon en mètres
+        })
+        
+        zoomCircle.addTo(map);
+    }
     
     // Fonction pour calculer le niveau de zoom en fonction de la distance choisie
     function getZoomLevel(distance) {
@@ -515,7 +746,7 @@ $(document).ready(function () {
         }
     }
 
-    // Fonction pour gérer la soumission du formulaire
+    // Fonction pour gérer la soumission du formulaire adresse 
     async function onSubmitForm(event) {
 
         event.preventDefault();
@@ -546,7 +777,6 @@ $(document).ready(function () {
 
         try {
             dpt_code = await getDepartmentFromCoordinates(latitude, longitude);
-            console.log(dpt_code);
         } catch (error) {
             console.error("Erreur :", error.message);
             document.getElementById('error-message').innerText = "L'adresse entrée apparaît en dehors du territoire français";
@@ -554,30 +784,58 @@ $(document).ready(function () {
         }
 
         // Filtre des actions à afficher
-        data = filter_distance(csvData.data, latitude, longitude, distance);
-
-        // On replot les marqueurs
-        $("#location_action_counter").html();
-        if (data.length === 1) {
-            $("#location_action_counter").html(`Une action dans ce périmètre`);
-        } else if (data.length > 1) {
-            $("#location_action_counter").html(`${data.lenght} actions trouvées dans ce périmètre`);
+        const dispPublicRestreint = $('#display_public_restreint');
+        if (dispPublicRestreint[0].checked) {
+            data = csvData.data;
         } else {
-            $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+            data = filter_column(csvData.data, "est_grand_public", on_true=true);
         }
+
+        const dispActionPassees = $('#display_actions_passees');
+        if (!dispActionPassees[0].checked) {
+            data = filter_passed_date(data);
+        }
+
+        data = filter_distance(data, latitude, longitude, distance);
+
+        // Stockage de l'info sur le filtre utilisé
+        geoFilter = {
+            "type" : "coord_dist",
+            "lat" : latitude,
+            "lon" : longitude,
+            "adresse" : address,
+            "distance" : distance
+        }
+
+        // // On replot les marqueurs
+        $("#location_action_counter").empty();
+        // if (data.length === 1) {
+        //     $("#location_action_counter").html(`Une action dans ce périmètre`);
+        // } else if (data.length > 1) {
+
+        //     $("#location_action_counter").html(`${data.length} actions trouvées dans ce périmètre`);
+        // } else {
+        //     $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+        // }
+        // if (data.length === 0) {
+        //     $("#location_action_counter").html("Pas d'action enregistrée dans ce secteur pour l'instant...");
+        // }
         
         
         // Mise à joue de l'extent de la carte
         centerMap(map, latitude, longitude, distance);
 
-        // Affichage de l'adresse entrée par l'utilisateur
-        const myPosition_marker = L.AwesomeMarkers.icon({
-            icon: 'coffee',
-            markerColor: 'black'
-          });        
+        // Dessin d'un cercle
+        addCircle(map, latitude, longitude , distance);
 
-        // var marker = L.marker([latitude, longitude],{icon: myPosition_marker});
-        // map.addLayer(marker);
+        // On scroll pour se ramener sur la carte
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
+
+        // On remplit le tableau des actions si nécesaire
+        const dispActionsTable = $('#displayActionTable');
+        if (dispActionsTable[0].checked) {
+            fillMapTableActions();
+        }
         
         // Mise à jour des statistiques départementales
         // update_plot_nb_actions(dpt_code);
@@ -588,26 +846,31 @@ $(document).ready(function () {
     document.getElementById('locationForm').addEventListener('submit', onSubmitForm);
 
     // Menu déroulant choix de département
-    $("#dpt-dropdown .dropdown-item").on("click", function(e) {
+    $('#selectDepartement').change(function() {
 
-        e.preventDefault();
-
-        // On récupère le dpt sélectionné
-        var dpt_code = $(this).attr("value");
-        
+        var dpt_code = $(this).val();
 
         // On filtre les actions
         data = filtrer_dpt(csvData.data, dpt_code);
 
-        // MAJ message
-        $("#dpt_action_counter").html()
-        if (data.lenght === 1) {
-            $("#dpt_action_counter").html(`Une action dans le ${dpt_code}`);
-        } else if (data.length > 1) {   
-            $("#dpt_action_counter").html(`${data.length} actions dans le ${dpt_code}`);
-        } else {
-            $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // Stockage de l'info sur le filtre utilisé
+        geoFilter = {
+            "type" : "departement",
+            "dpt_code" : dpt_code
         }
+
+        // MAJ message
+        $("#dpt_action_counter").empty()
+        // if (data.length === 1) {
+        //     $("#dpt_action_counter").html(`Une action dans le ${dpt_code}`);
+        // } else if (data.length > 1) {   
+        //     $("#dpt_action_counter").html(`${data.length} actions dans le ${dpt_code}`);
+        // } else {
+        //     $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // }
+        // if (data.length === 0) {
+        //     $("#dpt_action_counter").html(`Aucune action enregistrée dans le ${dpt_code} pour le moment...`);
+        // }
 
         zoom_info = OSM_dpt_data[dpt_code];
 
@@ -616,15 +879,29 @@ $(document).ready(function () {
         // Mettre à jour le volet stats départementales
         // update_plot_nb_actions(dpt_code);
         // update_dpt_button(dpt_code);
-        
+
+        // On scroll pour se ramener sur la carte
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
+
+        const dispActionsTable = $('#displayActionTable');
+        if (dispActionsTable[0].checked) {
+            fillMapTableActions();
+        }
+
+        // Effacer le cercle de recherche par adresse si dessiné
+        if (zoomCircle) {
+            zoomCircle.remove();
+        }
+
 
     });
-
 
     // form de filtrage des actions
     async function onSubmitFilterForm(event) {
 
         event.preventDefault();
+
+        catActionFilter = '';
 
         var data;
 
@@ -633,7 +910,10 @@ $(document).ready(function () {
         const checkboxList_risques = $('#select_risques_form input[type="checkbox"]');
         checkboxList_risques.each(function() {
             if (this.checked) {
-                risques_to_filter_on.push(`est_${this.id}`)
+                risques_to_filter_on.push(`est_${this.id}`);
+                console.log(this.id);
+                console.log($("label[for='"+this.id+"']").html());
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
 
@@ -641,7 +921,8 @@ $(document).ready(function () {
         const checkboxList_publics = $('#select_publics_form input[type="checkbox"]');
         checkboxList_publics.each(function() {
             if (this.checked) {
-                publics_to_filter_on.push(`est_${this.id}`)
+                publics_to_filter_on.push(`est_${this.id}`);
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
 
@@ -649,22 +930,32 @@ $(document).ready(function () {
         const checkboxList_type_action = $('#select_type_action_form input[type="checkbox"]');
         checkboxList_type_action.each(function() {
             if (this.checked) {
-                type_action_to_filter_on.push(`est_${this.id}`)
+                type_action_to_filter_on.push(`est_${this.id}`);
+                catActionFilter = catActionFilter + " - " + $("label[for='"+this.id+"']").html();
             }
         });
+
+        if (catActionFilter != 0){ 
+            catActionFilter = catActionFilter.slice(3);
+        }
 
         // On filtre les données
 
         // Actions public restreint 
 
-        const dispPublicRestreint = $('#display_public_restreint_form input[type="checkbox"]');
+        const dispPublicRestreint = $('#display_public_restreint');
 
         if (!dispPublicRestreint[0].checked){
             data = filter_column(csvData.data, "est_grand_public") 
         } else {
-            console.log("Also displaying public restreint actions");
             data = csvData.data;
+            catActionFilter = "Action grand public et public restreint - " + catActionFilter;
         };
+
+        const dispActionPassees = $('#display_actions_passees');
+        if (!dispActionPassees[0].checked) {
+            data = filter_passed_date(data);
+        }
 
         data = filter_risque_public_type_action(data, risques_to_filter_on, publics_to_filter_on, type_action_to_filter_on);
 
@@ -679,9 +970,7 @@ $(document).ready(function () {
         }
 
         // On scroll pour se ramener sur la carte
-        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");
-
-        
+        $("html, body").animate({ scrollTop: $('#map').offset().top - 50}, "slow");        
 
     }
 
@@ -701,5 +990,33 @@ $(document).ready(function () {
     $("#deselect_type_action").click(function() {
         $("#select_type_action_form input[type='checkbox']").prop("checked", false);
     });
+
+    // activation sur touche entrer
+    $("#deselect_risques").keypress(function() {
+        if (event.which === 13) {
+            $("#select_risques_form input[type='checkbox']").prop("checked", false);
+        }            
+    });
+
+    $("#deselect_publics").keypress(function() {
+        if (event.which === 13) {
+            $("#select_publics_form input[type='checkbox']").prop("checked", false);
+        }
+    });
+
+    $("#deselect_type_action").keypress(function() {
+        if (event.which === 13) {
+            $("#select_type_action_form input[type='checkbox']").prop("checked", false);
+        }
+    });
+
+    // Menu déroulant choix de zone géographique pour actions dématerialisées
+    $('#selectZoneGeoActionsDemat').change(function() {
+        var zone_geo= $(this).val();
+        console.log(zone_geo);
+        // display_dematerialized_actions(csvData.data);
+        display_dematerialized_actions_zone_geo(zone_geo);
+    });
+
 
 });

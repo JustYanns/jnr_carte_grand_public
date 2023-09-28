@@ -95,22 +95,18 @@
 
     <div class="container-fluid">
 
-        <!-- Texte d'en tête -->
-        <h1>Journée nationale de la résilience</h1>
-        <p>Retrouvez sur cette carte la localisation des différentes actions organisées cette année dans le cadre de la <strong>journée nationale de la résilience du 13 octobre 2023</strong>, certaines actions prennent place à d'autres moments de l'année. Cliquez sur le marqueur d'une action pour avoir plus d'informations.</p>
-
         <!-- Nombre d'actions / statistiques -->
-        <div class="row my-4">
+        <div class="row mt-4">
             
             <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
             <h3 id="action_counter"></h3>
             <p id="action_count_detail"></p>
-            <p id="filter_state" class="mb-1"></p>
+            <p id="filter_state"></p>
 
         </div>
 
         <!-- Carte -->
-        <div id="map" style="height: 700px;"></div>
+        <div id="map" style="height: 700px;" ></div>
 
         <!-- Bouton pour afficher les actions sur la carte dans un tableau en bas de page-->
         <div class="form-check">
@@ -330,14 +326,15 @@
 
                                 <div class="col-md-6">
 
+                                    <fieldset class="border p-2">
+                                    <legend class="w-auto"><strong>Public ciblé :</strong></legend>
+
                                     <div class="form-group" id="select_publics_form"> 
                                         <!--Tous public, Famille, Jeune public, Séniors-->
-        
-                                        <label class="mb-2"><strong>Public ciblé :</strong></label>
-        
+                
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="tous_public">
-                                            <label class="form-check-label" for="tout-public">Tout public</label>
+                                            <label class="form-check-label" for="tous_public">Tout public</label>
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="famille">
@@ -353,16 +350,21 @@
                                         </div>
         
                                         <div id="deselect_publics" type="button" class="btn btn-light mt-2" tabindex="0">
-                                            Tout désélectionner
+                                            Tout désélectionner - public ciblé
                                         </div>
         
                                     </div>
 
+                                    </fieldset>
+
+                                    <div class="mt-3"></div>
+
+                                    <fieldset class="border p-2">
+                                    <legend class="w-auto"><strong>Type d'action :</strong></legend>
+
                                     <div class="form-group" id="select_type_action_form"> 
                                         <!--Tous public, Famille, Jeune public, Séniors-->
-        
-                                        <label class="mb-2 mt-4"><strong>Type d'action :</strong></label>
-                                        
+                                            
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="atelier_jeux">
                                             <label class="form-check-label" for="atelier_jeux">Atelier avec jeux</label>
@@ -414,21 +416,23 @@
                                         </div>
 
                                         
-                                        <div id="deselect_type_action" type="button" class="btn btn-light mt-2 mb-3" tabindex="0">
-                                            Tout désélectionner
+                                        <div id="deselect_type_action" type="button" class="btn btn-light mt-2" tabindex="0">
+                                            Tout désélectionner - type d'action
                                         </div>
         
                                     </div>
 
+                                    </fieldset>
 
                                 </div>
 
                                 <div class="col-md-6">
 
+                                    <fieldset class="border p-2">
+                                    <legend class="w-auto"><strong>Risques traités :</strong></legend>
+
                                     <div class="form-group mb-3"  id="select_risques_form">
-        
-                                        <label class="mb-2"><strong>Risques traités :</strong> </label>
-        
+                
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="inondations">
                                             <label class="form-check-label" for="inondations">Inondations</label>
@@ -483,18 +487,26 @@
                                         </div>
         
                                         <div id="deselect_risques" type="button" class="btn btn-light mt-2" tabindex="0">
-                                            Tout désélectionner
+                                            Tout désélectionner - risques traités
                                         </div>
         
                                     </div>
+                                    </fieldset>
 
                                     <hr>
 
                                     <div class="form-group" id="display_public_restreint_form">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="display_public_restreint">
-                                            <label class="form-check-label" for="display_public_restreint">Afficher également les actions non ouvertes au grand public.</label>
+                                            <label class="form-check-label" for="display_public_restreint">Afficher les actions non ouvertes au grand public.</label>
                                         </div>
+
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="display_actions_passees">
+                                            <label class="form-check-label" for="display_actions_passees">Afficher les actions passées.</label>
+                                        </div>
+
+                                        
                                     </div>
 
 
@@ -503,7 +515,7 @@
                                 
 
                             </div>
-                            <button type="submit" class="btn btn-primary">Filtrer les actions affichées</button>
+                            <button type="submit" class="btn btn-primary mt-3">Filtrer les actions affichées</button>
                         </form>
         
                         <div class="mt-3" id="filter_action_counter"></div>

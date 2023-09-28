@@ -52,3 +52,7 @@ body {
 .contentIntensiveTable {
     font-size: 10px; /* Vous pouvez ajuster la taille en fonction de vos besoins */
 }
+
+legend {
+    font-size: 16px; /* Vous pouvez ajuster la taille en fonction de vos besoins */
+}
