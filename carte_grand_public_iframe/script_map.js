@@ -555,13 +555,12 @@ $(document).ready(function () {
 
             // Affichage des actions dématerialisées
             data = filter_column(csvData.data, "est_dematerialisee");
-            // display_dematerialized_actions(data);
 
             // Décompte des actions
             nb_actions_total = csvData.data.length;
             // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
-            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment <span style="color:red"> (comprend aussi les projets non acceptés)</span>`)
-            $("#action_count_detail").html(`Dont <strong>${nb_actions}</strong> actions non dématerialisées ouvertes au grand public`)
+            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
+            $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
 
             // Zones géographiques 
 
