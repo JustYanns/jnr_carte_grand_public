@@ -546,7 +546,7 @@ $(document).ready(function () {
             legend.onAdd = function (map) {
 
                 var div = L.DomUtil.create('div', 'info legend');
-                labels = ['<strong>Risques abordés</strong>'],
+                labels = ['<strong>Risques présentés à l\'évènement</strong>'],
 
                 labels.push('<span style="color:#38a9dd">◼</span> (N/T) Multirisques');
                 labels.push('<span style="color:#72b026">◼</span> (N) Risques naturels');
