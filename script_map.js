@@ -528,14 +528,16 @@ $(document).ready(function () {
                     zones_geo_labels.push(row["zone_geo_projet"]);
                 }
 
-                
             });
 
-            // Restreindre aux actions grand public
-            var data = filter_column(csvData.data, "est_grand_public");
+            // // Restreindre aux actions grand public
+            // var data = filter_column(csvData.data, "est_grand_public");
 
-            // Restreinddre aux actions futures
-            data = filter_passed_date(data);
+            // // Restreinddre aux actions futures
+            // data = filter_passed_date(data);
+
+            // Afficher toutes les actions
+            data = csvData.data
 
             // plot des marqueurs
             var nb_actions = plot_actions_markers(data);
