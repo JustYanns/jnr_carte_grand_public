@@ -575,8 +575,8 @@ $(document).ready(function () {
             // Décompte des actions
             nb_actions_total = csvData.data.length;
             // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
-            $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
-            $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
+            // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
+            // $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
 
             // Zones géographiques 
 
