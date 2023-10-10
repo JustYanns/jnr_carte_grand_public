@@ -607,6 +607,18 @@ $(document).ready(function () {
         })
         .catch(error => console.error('Une erreur s\'est produite :', error));
 
+    // Chargement des info nb action / dossier
+    fetch('./data/statistiques_generales.json')
+        .then(response => response.json())
+        .then(data => {
+
+            $("#action_counter").html(`<strong>${data.nb_dossiers}</strong> dossiers labellisés pour un total de <strong>${data.nb_actions}</strong> actions organisées.`)
+            $("#action_count_detail").html(`Dernière mise à jour : ${data.date_maj}`)
+            
+        })
+        .catch(error => console.error('Une erreur s\'est produite :', error));
+
+
     // Boutons pour changer la vue de la carte
 
     var zoom_center_areas = {
