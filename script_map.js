@@ -612,7 +612,7 @@ $(document).ready(function () {
         .then(response => response.json())
         .then(data => {
 
-            $("#action_counter").html(`<strong>${data.nb_dossiers}</strong> dossiers labellisés pour un total de <strong>${data.nb_actions}</strong> actions organisées.`)
+            // $("#action_counter").html(`<strong>${data.nb_dossiers}</strong> dossiers labellisés pour un total de <strong>${data.nb_actions}</strong> actions organisées.`)
             $("#action_count_detail").html(`Dernière mise à jour : ${data.date_maj}`)
             
         })
