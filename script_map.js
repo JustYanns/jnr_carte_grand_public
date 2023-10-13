@@ -282,10 +282,7 @@ function plot_actions_markers(data) {
 
             // action passée
 
-            // console.log(item.date_fin.getTime());
-            // console.log(date_today.getTime());
-
-            if ((item.date_fin.getTime() < date_today.getTime())) {
+            if ((item.date_fin.getTime()+24*3600*1000 < date_today.getTime())) {
                 popupContent += '<span style="color:red"> (Action passée)</span>'
                 // popupContent += ' (Action passée)'
             }
