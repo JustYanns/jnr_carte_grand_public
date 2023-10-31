@@ -243,6 +243,7 @@ function plot_actions_markers(data) {
             plottedData.push({
                 "nom" : item.nom,
                 "organisateur" : item.organisateur,
+                "coporteurs" : item.coporteurs,
                 "type_action_str" : item.type_action_str ,
                 "public_cible_str" : item.public_cible_str ,
                 "risque_cible_str" : item.risque_cible_str,
@@ -288,7 +289,13 @@ function plot_actions_markers(data) {
             }
             popupContent += "</br>"
             
-            popupContent += '<strong>Organisé par :</strong> ' + item.organisateur + '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
+            popupContent += '<strong>Organisé par :</strong> ' + item.organisateur
+
+            if (item.coporteurs) {
+                popupContent += ' (<em>Coporteurs :</em> ' + item.coporteurs + ')'
+            }
+            
+            popupContent += '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
             
             // Lien vers plus d'information
             if (item.lien_programme) {
