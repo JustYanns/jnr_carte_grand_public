@@ -232,14 +232,12 @@ function plot_actions_markers(data) {
 
     // Parcours des données et création des marqueurs
     data.forEach(function (item) {
-
         var lat = item.lat;
         var lon = item.lon;
 
         // Vérification si les coordonnées sont valides (pas NaN) et que date fin > date du jour
         // if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
         if (!isNaN(lat) && !isNaN(lon) && !isNaN(item.date_debut) && !isNaN(item.date_fin)) {
-
             plottedData.push({
                 "nom" : item.nom,
                 "organisateur" : item.organisateur,
@@ -475,7 +473,7 @@ $(document).ready(function () {
 
     // Création de la carte avec Leaflet
     map = L.map('map').setView([46.5, 2.3522],5); // Coordonnées de départ et niveau de zoom
-    
+
     // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); // Fond de carte OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -486,11 +484,13 @@ $(document).ready(function () {
         url: 'data/actions_jnr.csv',
         dataType: 'text',
         success: function (data) {
-
+            
             csvData = Papa.parse(data, { header: true, skipEmptyLines: true });
-
+            
+            
             // On parse les colonnes de booléens et de flottant 
             var float_cols = ["lat","lon"]
+
             var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
             var date_cols = ["date_debut", "date_fin"]
             var str_cols = ["insee_dep"]
@@ -800,7 +800,6 @@ $(document).ready(function () {
             document.getElementById('error-message').innerText = "L'adresse entrée apparaît en dehors du territoire français";
             return ;
         }
-
         // Filtre des actions à afficher
         const dispPublicRestreint = $('#display_public_restreint');
         if (dispPublicRestreint[0].checked) {
@@ -813,6 +812,15 @@ $(document).ready(function () {
         if (!dispActionPassees[0].checked) {
             data = filter_passed_date(data);
         }
+
+        // Filtre sur la date de début et de fin. On utilise la valeur de deux input type date comparé 
+        const dateDebut = $("#date_debut").val();
+        const dateFin = $("#date_fin").val();
+        data = data.filter(function(i) {
+            return i.date_debut.getTime() >= new Date(dateDebut).getTime() && i.date_fin.getTime() <= new Date(dateFin).getTime();
+        });
+
+
 
         data = filter_distance(data, latitude, longitude, distance);
 
@@ -974,6 +982,14 @@ $(document).ready(function () {
         if (!dispActionPassees[0].checked) {
             data = filter_passed_date(data);
         }
+
+        // Filtre sur la date de début et de fin. On utilise la valeur de deux input type date comparé
+        const dateDebut = $('#date_debut').val();
+        const dateFin = $('#date_fin').val();
+        data = data.filter(function(i) {
+            return i.date_debut.getTime() >= new Date(dateDebut).getTime() && i.date_fin.getTime() <= new Date(dateFin).getTime();
+        });
+
 
         data = filter_risque_public_type_action(data, risques_to_filter_on, publics_to_filter_on, type_action_to_filter_on);
 
