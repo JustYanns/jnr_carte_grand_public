@@ -99,40 +99,10 @@
         <div class="row mt-4">
             
             <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
-            <h2 id="action_counter">Participez à un évènement près de chez vous parmi les plus de <strong>2000</strong> initiatives</h2>
+            <h2 id="action_counter">Retrouvez toute l'année les actions "Face aux risques agissons" près de chez vous !</h2>
             <p id="action_count_detail"></p>
             <p id="filter_state"></p>
 
-        </div>
-
-        <!-- Carte -->
-        <div id="map" style="height: 700px;" ></div>
-
-        <!-- Bouton pour afficher les actions sur la carte dans un tableau en bas de page-->
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="displayActionTable">
-            <label class="form-check-label" for="displayActionTable">Afficher les actions représentée sur la carte dans un tableau (si difficultés d'usage de la carte).</label>
-        </div>
-        <p id="filter_state_table"></p>
-        <div id="mapActionTable" class="contentIntensiveTable"></div>
-
-        <div class="row mt-3">
-            <h4>Choisir la zone d'affichage parmi la liste ci-dessous :</h4>
-        
-            <select id="selectRegion" class="form-control">
-                <option value="metropole">Hexagone / Corse</option>
-                <option value="guadeloupe">Guadeloupe</option>
-                <option value="martinique">Martinique</option>
-                <option value="guyane">Guyane</option>
-                <option value="la_reunion">La Réunion</option>
-                <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
-                <option value="mayotte">Mayotte</option>
-                <option value="saint_barthelemy">Saint-Barthélemy</option>
-                <option value="saint_martin">Saint-Martin</option>
-                <option value="wallis_et_futuna">Wallis-et-Futuna</option>
-                <option value="polynesie_française">Polynésie française</option>
-                <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
-            </select>
         </div>
 
         <!-- Choix localisation / filtres -->
@@ -144,7 +114,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapseOne"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
-                        Quelles sont les actions de la journée de la résilience près de chez moi ?
+                        Quelles sont les actions "Face aux risques agissons" près de chez moi ?
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" data-parent="#accordionForm1">
@@ -177,7 +147,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
-                        Quelles sont les actions de la journée de la résilience dans mon département ?
+                        Quelles sont les actions "Face aux risques agissons" dans mon département ?
                     </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" data-parent="#accordionForm1">
@@ -305,6 +275,37 @@
             </div>
 
         </div>
+
+        <!-- Carte -->
+        <div id="map" style="height: 700px;" ></div>
+
+        <!-- Bouton pour afficher les actions sur la carte dans un tableau en bas de page-->
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="displayActionTable">
+            <label class="form-check-label" for="displayActionTable">Afficher les actions représentée sur la carte dans un tableau (si difficultés d'usage de la carte).</label>
+        </div>
+        <p id="filter_state_table"></p>
+        <div id="mapActionTable" class="contentIntensiveTable"></div>
+
+        <div class="row mt-3">
+            <h4>Choisir la zone d'affichage parmi la liste ci-dessous :</h4>
+        
+            <select id="selectRegion" class="form-control">
+                <option value="metropole">Hexagone / Corse</option>
+                <option value="guadeloupe">Guadeloupe</option>
+                <option value="martinique">Martinique</option>
+                <option value="guyane">Guyane</option>
+                <option value="la_reunion">La Réunion</option>
+                <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
+                <option value="mayotte">Mayotte</option>
+                <option value="saint_barthelemy">Saint-Barthélemy</option>
+                <option value="saint_martin">Saint-Martin</option>
+                <option value="wallis_et_futuna">Wallis-et-Futuna</option>
+                <option value="polynesie_française">Polynésie française</option>
+                <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
+            </select>
+        </div>
+
 
         <div class="row mt-4"></div>
 
@@ -535,12 +536,12 @@
 
         <div class="row mt-4"></div>
 
-        <h4 >Actions dématerialisées (webinaires, vidéos...) : </h4>
+        <!-- <h4 >Actions dématerialisées (webinaires, vidéos...) : </h4>
         <div class="mb-2">Sélectionnez une zone géographique pour avoir la liste des actions dématerialisées s'y appliquant.</div>
 
         <select id="selectZoneGeoActionsDemat" class="form-control"></select>
 
-        <div id="actions_demat" class="mt-3"></div>
+        <div id="actions_demat" class="mt-3"></div> -->
 
     </div>
 
