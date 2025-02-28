@@ -97,12 +97,21 @@
 
         <!-- Nombre d'actions / statistiques -->
         <div class="row mt-4">
-            
-            <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
-            <h2 id="action_counter">Retrouvez toute l'année les actions "Face aux risques agissons" près de chez vous !</h2>
-            <p id="action_count_detail"></p>
-            <p id="filter_state"></p>
+            <!-- Logo -->
+            <img src="img/logo.png" alt="Logo journée nationale de la résilience" class="img-fluid" style="max-width: 300px;">
+            <p id="logo-spacer"></p>
+           <div> 
+                <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
+                <h2 id="action_counter">Participez à un évènement près de chez vous !</h2>
+                <p id="action_count_detail"></p>
+                <p id="filter_state">
+                    La Journée nationale de la résilience mise en place par le Gouvernement depuis 2022, et institutionnalisée par la loi du 10 juillet 2023 vise à préparer chaque citoyen aux bons comportements en cas de survenance d’une catastrophe afin qu’il devienne ainsi le premier acteur de sa sécurité.
+                </p>
+                <p>
+                    Chaque année, un nouvel appel à projets est lancé pour organiser des actions de sensibilisation sur les risques naturels et technologiques, y compris nucléaires : celui-ci permettra aux projets organisés tout au long de l’année de disposer du label « face aux risques agissons », avec un point d’orgue le 13 octobre en cohérence avec la Journée internationale pour la réduction des risques de catastrophes.
 
+                </p>
+           </div>
         </div>
 
         <!-- Choix localisation / filtres -->
@@ -309,17 +318,17 @@
 
         <div class="row mt-4"></div>
 
-        <h4 >Filtrer les actions selon le public visé, le format de l'évènement et son contenu :</h4>
+        <h4 >Filtrer les actions selon leurs caractéristiques :</h4>
 
         <div class="accordion"  id="accordionForm2">
 
             <div class="accordion-item">
-                <h2 class="accordion-header">
+                <!-- <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"  aria-controls="collapseTwo">
                         Qu'est ce qui m'intéresse ?
                     </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-parent="#accordionForm2" aria-expanded="false">
+                </h2> -->
+                <div id="collapseTwo" class="accordion-collapse collapse show" > <!--data-parent="#accordionForm2" aria-expanded="false"> -->
                     <div class="accordion-body">
 
                         <form id="filterForm">
@@ -334,8 +343,8 @@
                                         <!--Tous public, Famille, Jeune public, Séniors-->
                 
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="tous_public">
-                                            <label class="form-check-label" for="tous_public">Tout public</label>
+                                            <input type="checkbox" class="form-check-input" id="tout_public">
+                                            <label class="form-check-label" for="tout_public">Tout public</label>
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="famille">
@@ -343,7 +352,7 @@
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="jeune_public">
-                                            <label class="form-check-label" for="jeunePublic">Jeune public</label>
+                                            <label class="form-check-label" for="jeune_public">Jeune public</label>
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="seniors">
@@ -433,6 +442,11 @@
 
                                     <div class="form-group" id="display_public_restreint_form">
                                         <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="display_PHM_PMR">
+                                            <label class="form-check-label" for="display_PHM_PMR">Accès PHM/PMR uniquement</label>
+                                        </div>
+
+                                        <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="display_public_restreint" checked="true">
                                             <label class="form-check-label" for="display_public_restreint">Afficher les actions non ouvertes au grand public.</label>
                                         </div>
@@ -442,11 +456,11 @@
                                             <label class="form-check-label" for="display_actions_passees">Afficher les actions passées.</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="date" class="form-checked-input" id="date_debut" value="2024-01-01">
+                                            <input type="date" class="form-checked-input" id="date_debut" value="2025-01-01">
                                             <label class="form-label" for="date_debut">Date de début des actions</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="date" class="form-checked-input" id="date_fin" value="2024-12-31">
+                                            <input type="date" class="form-checked-input" id="date_fin" value="2025-12-31">
                                             <label class="form-label" for="date_fin">Date de fin des actions</label>
                                         </div>
 
