@@ -456,13 +456,19 @@
                                             <label class="form-check-label" for="display_actions_passees">Afficher les actions passées.</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="date" class="form-checked-input" id="date_debut" value="2025-01-01">
+                                            <input type="date" class="form-checked-input" id="date_debut" value="2100-01-01">
                                             <label class="form-label" for="date_debut">Date de début des actions</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="date" class="form-checked-input" id="date_fin" value="2025-12-31">
+                                            <input type="date" class="form-checked-input" id="date_fin" value="1999-12-31">
                                             <label class="form-label" for="date_fin">Date de fin des actions</label>
                                         </div>
+                                        <script>
+                                            let date = new Date()
+                                            let year = date.getFullYear()
+                                            begin = $("#date_debut").val(year + "-01-01")
+                                            end = $("#date_fin").val(year + "-12-31")
+                                        </script>
 
                                     </div>
                                     <hr>
