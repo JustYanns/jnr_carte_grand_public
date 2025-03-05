@@ -553,9 +553,8 @@ $(document).ready(function () {
                 "est_accessible_pmr",
 
                 "est_tout_public",
-                "est_famille",
                 "est_jeune_public",
-                "est_seniors",
+                "est_public_vulnerable",
 
                 'est_atelier_jeux',
                 'est_atelier_sensibilisation',
