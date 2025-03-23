@@ -97,42 +97,34 @@
 
         <!-- Nombre d'actions / statistiques -->
         <div class="row mt-4">
-            
-            <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
-            <h2 id="action_counter">Participez à un évènement près de chez vous !</h2>
-            <p id="action_count_detail"></p>
-            <p id="filter_state"></p>
+            <!-- Logo -->
+            <div class="col">
+                <h1>Journée nationale de la résilience</h1>
+            </div>
+            <div class="col">
+                <img src="img/logo.png" alt="Logo journée nationale de la résilience" class="img-fluid" style="max-width: 300px;">
+            </div> 
 
-        </div>
 
-        <!-- Carte -->
-        <div id="map" style="height: 700px;" ></div>
 
-        <!-- Bouton pour afficher les actions sur la carte dans un tableau en bas de page-->
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="displayActionTable">
-            <label class="form-check-label" for="displayActionTable">Afficher les actions représentée sur la carte dans un tableau (si difficultés d'usage de la carte).</label>
-        </div>
-        <p id="filter_state_table"></p>
-        <div id="mapActionTable" class="contentIntensiveTable"></div>
 
-        <div class="row mt-3">
-            <h4>Choisir la zone d'affichage parmi la liste ci-dessous :</h4>
-        
-            <select id="selectRegion" class="form-control">
-                <option value="metropole">Hexagone / Corse</option>
-                <option value="guadeloupe">Guadeloupe</option>
-                <option value="martinique">Martinique</option>
-                <option value="guyane">Guyane</option>
-                <option value="la_reunion">La Réunion</option>
-                <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
-                <option value="mayotte">Mayotte</option>
-                <option value="saint_barthelemy">Saint-Barthélemy</option>
-                <option value="saint_martin">Saint-Martin</option>
-                <option value="wallis_et_futuna">Wallis-et-Futuna</option>
-                <option value="polynesie_française">Polynésie française</option>
-                <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
-            </select>
+            <p id="logo-spacer"></p>
+           <div> 
+                <!-- <p class="counter-count" id="nb_actions_counter"></p> -->
+                <h2 id="action_counter">Participez à un évènement près de chez vous !</h2>
+                <p id="action_count_detail"></p>
+                <p id="filter_state">
+                    La Journée nationale de la résilience mise en place par le Gouvernement depuis 2022, et institutionnalisée par la loi du 10 juillet 2023 
+                    vise à préparer chaque citoyen aux bons comportements en cas de survenance d’une catastrophe afin qu’il devienne ainsi le premier acteur 
+                    de sa sécurité.
+                </p>
+                <p>
+                    Chaque année, un nouvel appel à projets est lancé pour organiser des actions de sensibilisation sur les risques naturels et technologiques, y 
+                    compris nucléaires : celui-ci permet aux projets organisés tout au long de l’année de disposer du label « face aux risques agissons », avec 
+                    un point d’orgue le 13 octobre en cohérence avec la Journée internationale pour la réduction des risques de catastrophes.
+
+                </p>
+           </div>
         </div>
 
         <!-- Choix localisation / filtres -->
@@ -144,7 +136,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapseOne"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
-                        Quelles sont les actions de la journée de la résilience près de chez moi ?
+                        Quelles sont les actions "Face aux risques agissons" près de chez moi ?
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" data-parent="#accordionForm1">
@@ -177,7 +169,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"  aria-controls="collapseOne"> <!--aria-expanded="true"-->
-                        Quelles sont les actions de la journée de la résilience dans mon département ?
+                        Quelles sont les actions "Face aux risques agissons" dans mon département ?
                     </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" data-parent="#accordionForm1">
@@ -306,19 +298,50 @@
 
         </div>
 
+        <!-- Carte -->
+        <div id="map" style="height: 700px;" ></div>
+
+        <!-- Bouton pour afficher les actions sur la carte dans un tableau en bas de page-->
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="displayActionTable">
+            <label class="form-check-label" for="displayActionTable">Afficher les actions représentée sur la carte dans un tableau (si difficultés d'usage de la carte).</label>
+        </div>
+        <p id="filter_state_table"></p>
+        <div id="mapActionTable" class="contentIntensiveTable"></div>
+
+        <div class="row mt-3">
+            <h4>Choisir la zone d'affichage parmi la liste ci-dessous :</h4>
+        
+            <select id="selectRegion" class="form-control">
+                <option value="metropole">Hexagone / Corse</option>
+                <option value="guadeloupe">Guadeloupe</option>
+                <option value="martinique">Martinique</option>
+                <option value="guyane">Guyane</option>
+                <option value="la_reunion">La Réunion</option>
+                <option value="saint_pierre_et_miquelon">Saint-Pierre-et-Miquelon</option>
+                <option value="mayotte">Mayotte</option>
+                <option value="saint_barthelemy">Saint-Barthélemy</option>
+                <option value="saint_martin">Saint-Martin</option>
+                <option value="wallis_et_futuna">Wallis-et-Futuna</option>
+                <option value="polynesie_française">Polynésie française</option>
+                <option value="nouvelle_caledonie">Nouvelle-Calédonie</option>
+            </select>
+        </div>
+
+
         <div class="row mt-4"></div>
 
-        <h4 >Filtrer les actions selon le public visé, le format de l'évènement et son contenu :</h4>
+        <h4 >Filtrer les actions selon leurs caractéristiques :</h4>
 
         <div class="accordion"  id="accordionForm2">
 
             <div class="accordion-item">
-                <h2 class="accordion-header">
+                <!-- <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"  aria-controls="collapseTwo">
                         Qu'est ce qui m'intéresse ?
                     </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-parent="#accordionForm2" aria-expanded="false">
+                </h2> -->
+                <div id="collapseTwo" class="accordion-collapse collapse show" > <!--data-parent="#accordionForm2" aria-expanded="false"> -->
                     <div class="accordion-body">
 
                         <form id="filterForm">
@@ -333,20 +356,16 @@
                                         <!--Tous public, Famille, Jeune public, Séniors-->
                 
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="tous_public">
-                                            <label class="form-check-label" for="tous_public">Tout public</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="famille">
-                                            <label class="form-check-label" for="famille">Famille</label>
+                                            <input type="checkbox" class="form-check-input" id="tout_public">
+                                            <label class="form-check-label" for="tout_public">Tout public</label>
                                         </div>
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="jeune_public">
-                                            <label class="form-check-label" for="jeunePublic">Jeune public</label>
+                                            <label class="form-check-label" for="jeune_public">Jeune public</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="seniors">
-                                            <label class="form-check-label" for="seniors">Séniors</label>
+                                            <input type="checkbox" class="form-check-input" id="public_vulnerable">
+                                            <label class="form-check-label" for="public_vulnerable">Public vulnérable</label>
                                         </div>
         
                                         <div id="deselect_publics" type="button" class="btn btn-light mt-2" tabindex="0">
@@ -423,14 +442,14 @@
                                     </div>
 
                                     </fieldset>
-
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <div class="mt-2"></div>
+                                    <div class="mt-3"></div>
 
                                     <div class="form-group" id="display_public_restreint_form">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="display_PHM_PMR">
+                                            <label class="form-check-label" for="display_PHM_PMR">Accès PHM/PMR uniquement</label>
+                                        </div>
+
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="display_public_restreint" checked="true">
                                             <label class="form-check-label" for="display_public_restreint">Afficher les actions non ouvertes au grand public.</label>
@@ -440,15 +459,53 @@
                                             <input type="checkbox" class="form-check-input" id="display_actions_passees" checked="true">
                                             <label class="form-check-label" for="display_actions_passees">Afficher les actions passées.</label>
                                         </div>
+                                        <div class="form-check">
+                                            <input type="date" class="form-checked-input" id="date_debut" value="2100-01-01">
+                                            <label class="form-label" for="date_debut">Date de début des actions</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="date" class="form-checked-input" id="date_fin" value="1999-12-31">
+                                            <label class="form-label" for="date_fin">Date de fin des actions</label>
+                                        </div>
+                                        <script>
+                                            let date = new Date()
+                                            let year = date.getFullYear()
+                                            begin = $("#date_debut").val(year + "-01-01")
+                                            end = $("#date_fin").val(year + "-12-31")
+                                        </script>
 
                                     </div>
-                                    <hr>
+
+                                </div>
+
+                                <div class="col-md-6">
 
                                     <fieldset class="border p-2">
-                                    <legend class="w-auto"><strong>Risques traités :</strong></legend>
+                                    <legend class="w-auto"><strong>Sujets traités :</strong></legend>
 
                                     <div class="form-group mb-3"  id="select_risques_form">
-                
+                                        <!-- Risque -->
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="multirisques">
+                                            <label class="form-check-label" for="multirisques">Multirisques</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="risques_naturels">
+                                            <label class="form-check-label" for="risques_naturels">Risques naturels</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="risques_technologiques">
+                                            <label class="form-check-label" for="risques_technologiques">Risques technologiques</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="gestes_qui_sauvent">
+                                            <label class="form-check-label" for="gestes_qui_sauvent">Gestes qui sauvent</label>
+                                        </div>
+                                        <!-- gray line -->
+                                        <hr>
+
+                                        <!-- Aleas -->
+
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="inondations">
                                             <label class="form-check-label" for="inondations">Inondations</label>
@@ -527,12 +584,12 @@
 
         <div class="row mt-4"></div>
 
-        <h4 >Actions dématerialisées (webinaires, vidéos...) : </h4>
+        <!-- <h4 >Actions dématerialisées (webinaires, vidéos...) : </h4>
         <div class="mb-2">Sélectionnez une zone géographique pour avoir la liste des actions dématerialisées s'y appliquant.</div>
 
         <select id="selectZoneGeoActionsDemat" class="form-control"></select>
 
-        <div id="actions_demat" class="mt-3"></div>
+        <div id="actions_demat" class="mt-3"></div> -->
 
     </div>
 

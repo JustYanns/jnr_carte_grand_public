@@ -17,7 +17,7 @@ var select_all_public = true;
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
 const dateFormatterCompact = new Intl.DateTimeFormat('fr-FR');
-const date_JNR = new Date(2023, 10, 13)
+const date_JNR = new Date(2025, 10, 13)
 const date_today = new Date();
 
 var zoomCircle;
@@ -45,6 +45,13 @@ const riskMult_marker = L.icon({
     popupAnchor : [0,-46]
 })
 
+const riskGeste_marker = L.icon({
+    iconUrl : "./icons/map_marker_geste.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+
 const riskNat_marker_b = L.icon({
     iconUrl : "./icons/map_marker_nat.png",
     iconSize : [33,46],
@@ -60,6 +67,12 @@ const riskTEch_marker_b = L.icon({
 })
 const riskMult_marker_b = L.icon({
     iconUrl : "./icons/map_marker_mixte.png",
+    iconSize : [33,46],
+    iconAnchor : [11,46],
+    popupAnchor : [0,-46]
+})
+const riskGeste_marker_b = L.icon({
+    iconUrl : "./icons/map_marker_geste.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
@@ -232,14 +245,12 @@ function plot_actions_markers(data) {
 
     // Parcours des données et création des marqueurs
     data.forEach(function (item) {
-
         var lat = item.lat;
         var lon = item.lon;
 
         // Vérification si les coordonnées sont valides (pas NaN) et que date fin > date du jour
         // if (!isNaN(lat) && !isNaN(lon) && (item.date_fin.getTime() >= date_today.getTime())) {
         if (!isNaN(lat) && !isNaN(lon) && !isNaN(item.date_debut) && !isNaN(item.date_fin)) {
-
             plottedData.push({
                 "nom" : item.nom,
                 "organisateur" : item.organisateur,
@@ -273,7 +284,7 @@ function plot_actions_markers(data) {
 
             if (item.date_debut.getTime() === item.date_fin.getTime()) {
                 if (item.date_debut.getTime() === date_JNR.getTime()) {
-                    popupContent += "Le 13/10/2023, Journée nationale de la résilience"
+                    popupContent += "Le 13/10/2025, Journée nationale de la résilience"
                 } else {
                     popupContent += "Le " + dateFormatter.format(item.date_debut)
                 }
@@ -294,31 +305,54 @@ function plot_actions_markers(data) {
             if (item.coporteurs) {
                 popupContent += ' (<em>Coporteurs :</em> ' + item.coporteurs + ')'
             }
+            popupContent += '<br><strong>Accessibilité PSH/PMR : </strong>' + (item.est_accessible_pmr ? "Oui" : "Non");
+
             
-            popupContent += '<br><strong>Public ciblé : </strong>' + item.public_cible_str + "<br><strong>Type d'action : </strong>" + item.type_action_str + '<br><strong>Risques traités : </strong>' + item.risque_cible_str;
+            popupContent += 
+                '<br><strong>Public ciblé : </strong>' +
+                item.public_cible_str +
+                "<br><strong>Type d'action : </strong>" +
+                item.type_action_str +
+                '<br><strong>Sujet de l’action : </strong>' +
+                item.risque_cible_str;
             
             // Lien vers plus d'information
             if (item.lien_programme) {
-                popupContent += "<br>Pour plus d'information <a href=" + item.lien_programme + ' target="_blank">cliquez ici</a>';
-            } else {
-                popupContent += "<br>(Pas de ressource additionnelle fournie par l'organisateur.)";
+                popupContent += "<br><strong>Lien vers les ressources :</strong> <a href=" + item.lien_programme + ' target="_blank">ici</a>';
+            }
+            if (item.lien_inscription) {
+                popupContent += "<br><strong>Lien vers l'inscription :</strong> <a href=" + item.lien_inscription + ' target="_blank">ici</a>';
+            }
+            if (item.lien_demat) {
+                popupContent += "<br><strong>Lien vers la ressource dématérialisée :</strong> <a href=" + item.lien_demat + ' target="_blank">ici</a>';
             }
 
+
             if (item.est_grand_public) {
-                if (item.est_risques_naturels && item.est_risques_technologiques) {
+                if (item.est_multirisques) {
                     var marker = L.marker([lat, lon],{icon: riskMult_marker}).bindPopup(popupContent);
                 } else if (item.est_risques_naturels) {
                     var marker = L.marker([lat, lon],{icon: riskNat_marker}).bindPopup(popupContent);
-                } else {
+                } else if (item.est_risques_technologiques) {
                     var marker = L.marker([lat, lon],{icon: riskTEch_marker}).bindPopup(popupContent);
+                } else if (item.est_gestes_qui_sauvent) {
+                    var marker = L.marker([lat, lon],{icon: riskGeste_marker}).bindPopup(popupContent);
                 }
+                else {
+                    var marker = L.marker([lat, lon]).bindPopup(popupContent);
+                } 
             } else {
-                if (item.est_risques_naturels && item.est_risques_technologiques) {
+                if (item.est_multirisques) {
                     var marker = L.marker([lat, lon],{icon: riskMult_marker_b}).bindPopup(popupContent);
                 } else if (item.est_risques_naturels) {
                     var marker = L.marker([lat, lon],{icon: riskNat_marker_b}).bindPopup(popupContent);
-                } else {
+                } else if (item.est_risques_technologiques) {
                     var marker = L.marker([lat, lon],{icon: riskTEch_marker_b}).bindPopup(popupContent);
+                } else if (item.est_gestes_qui_sauvent) {
+                    var marker = L.marker([lat, lon],{icon: riskGeste_marker_b}).bindPopup(popupContent);
+                }
+                else {  
+                    var marker = L.marker([lat, lon]).bindPopup(popupContent);
                 }
             }
 
@@ -399,7 +433,7 @@ function display_actions_table(data, tableContainer) {
 
         var row = $("<tr>");
 
-        $.each(["nom","organisateur","type_action_str","public_cible_str","risque_cible_str","adresse","date_debut","date_fin","lien_programme"], function (index, label) {
+        $.each(["nom","organisateur","type_action_str","public_cible_str","risque_cible_str","adresse","date_debut","date_fin","lien_programme","lien_inscription","lien_demat"], function (index, label) {
             var cell = $("<td>").text(item[label]);
             row.append(cell);
         });
@@ -448,7 +482,6 @@ function display_actions_table_demat(data, tableContainer) {
     
             tbody.append(row);
         }
-
     });
 
     table.append(tbody);
@@ -460,7 +493,7 @@ function display_actions_table_demat(data, tableContainer) {
 function display_dematerialized_actions_zone_geo(zone_geo){
 
     // Que actions dématerialisées
-    var data = filter_column(csvData.data, "est_dematerialisee", on_true=true);
+    var data = filter_column(csvData.data);
 
     // Que action dans la zone geo 
     data = filtrer_zone_geo(data, zone_geo);
@@ -475,7 +508,7 @@ $(document).ready(function () {
 
     // Création de la carte avec Leaflet
     map = L.map('map').setView([46.5, 2.3522],5); // Coordonnées de départ et niveau de zoom
-    
+
     // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); // Fond de carte OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -486,12 +519,54 @@ $(document).ready(function () {
         url: 'data/actions_jnr.csv',
         dataType: 'text',
         success: function (data) {
-
+            
             csvData = Papa.parse(data, { header: true, skipEmptyLines: true });
-
+            
+            
             // On parse les colonnes de booléens et de flottant 
             var float_cols = ["lat","lon"]
-            var bool_cols = ["est_grand_public","est_dematerialisee","est_risques_naturels","est_risques_technologiques","est_inondations","est_feux_de_foret","est_tempete_cyclone","est_seisme","est_eruption_volcanique","est_mouvement_de_terrain","est_risques_littoraux","est_avalanche","est_radon","est_accidents_industriels","est_accidents_nucleaires","est_rupture_de_barrage","est_transport_de_matieres_dangereuses","est_tous_public","est_famille","est_jeune_public","est_seniors", 'est_atelier_jeux','est_atelier_sensibilisation','est_conference','est_exercice_de_gestion_de_crise','est_exposition','est_formation','est_reunion_d_information','est_spectacle','est_visite_en_plein_air','est_visite_en_interieur']
+
+            var bool_cols = [
+                "est_grand_public",
+
+                "est_dematerialisee",
+
+                "est_multirisques",
+                "est_risques_naturels",
+                "est_risques_technologiques",
+                "est_gestes_qui_sauvent",
+
+                "est_inondations",
+                "est_feux_de_foret",
+                "est_tempete_cyclone",
+                "est_seisme",
+                "est_eruption_volcanique",
+                "est_mouvement_de_terrain",
+                "est_risques_littoraux",
+                "est_avalanche",
+                "est_radon",
+                "est_accidents_industriels",
+                "est_accidents_nucleaires",
+                "est_rupture_de_barrage",
+                "est_transport_de_matieres_dangereuses",
+
+                "est_accessible_pmr",
+
+                "est_tout_public",
+                "est_jeune_public",
+                "est_public_vulnerable",
+
+                'est_atelier_jeux',
+                'est_atelier_sensibilisation',
+                'est_conference',
+                'est_exercice_de_gestion_de_crise',
+                'est_exposition',
+                'est_formation',
+                'est_reunion_d_information',
+                'est_spectacle',
+                'est_visite_en_plein_air',
+                'est_visite_en_interieur']
+
             var date_cols = ["date_debut", "date_fin"]
             var str_cols = ["insee_dep"]
 
@@ -519,13 +594,16 @@ $(document).ready(function () {
                 })
 
                 // lien programme 
-                if (row["lien_programme"]) {
-                    if (!(row["lien_programme"].startsWith("http://") || row["lien_programme"].startsWith("https://")) && !row["lien_programme"].startsWith("www.")) {
-                        row["lien_programme"] = "http://www." + row["lien_programme"];
-                    } else if (row["lien_programme"].startsWith("www.") && !row["lien_programme"].startsWith("http://")) {
-                        row["lien_programme"] = "http://" + row["lien_programme"];
+                liste_label_lien = ["lien_programme", "lien_inscription", "lien_demat"]
+                liste_label_lien.forEach(function(col_name) {
+                    if (row[col_name]) {
+                        if (!(row[col_name].startsWith("http://") || row[col_name].startsWith("https://")) && !row[col_name].startsWith("www.")) {
+                            row[col_name] = "http://www." + row[col_name];
+                        } else if (row[col_name].startsWith("www.") && !row[col_name].startsWith("http://")) {
+                            row[col_name] = "http://" + row[col_name];
+                        }
                     }
-                }
+                })
 
                 // zone geo
                 if (row["est_dematerialisee"] && row["lien_programme"]) {
@@ -552,11 +630,12 @@ $(document).ready(function () {
             legend.onAdd = function (map) {
 
                 var div = L.DomUtil.create('div', 'info legend');
-                labels = ['<strong>Risques présentés à l\'évènement</strong>'],
+                labels = ['<strong>Sujets traités durant l\'événement</strong>'],
 
                 labels.push('<span style="color:#38a9dd">◼</span> (N/T) Multirisques');
                 labels.push('<span style="color:#72b026">◼</span> (N) Risques naturels');
                 labels.push('<span style="color:#d33d2a">◼</span> (T) Risques technologiques');
+                labels.push('<span style="color:#ff8c00">◼</span> (G) Gestes qui sauvent');
 
                 // labels.push('<i class="bi bi-circle-fill" style="color:#38a9dd"></i> Multirisques');
                 // labels.push('<i class="bi bi-circle-fill" style="color:#72b026"></i> Risques naturels');
@@ -573,32 +652,32 @@ $(document).ready(function () {
             };
             legend.addTo(map);
 
-            // Affichage des actions dématerialisées
-            data = filter_column(csvData.data, "est_dematerialisee");
+            //// Affichage des actions dématerialisées
+            //data = filter_column(csvData.data, "est_dematerialisee");
 
-            // Décompte des actions
-            nb_actions_total = csvData.data.length;
-            // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
-            // $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
-            // $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
+            //// Décompte des actions
+            //nb_actions_total = csvData.data.length;
+            //// $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment`)
+            //// $("#action_counter").html(`<strong>${nb_actions_total}</strong> actions recensées pour le moment.`)
+            //// $("#action_count_detail").html(`Dont <strong>${data.length}</strong> actions dématerialisées.`)
 
-            // Zones géographiques 
+            //// Zones géographiques 
 
-            function onlyUnique(value, index, array) {
-                return array.indexOf(value) === index;
-            }
+            //function onlyUnique(value, index, array) {
+            //    return array.indexOf(value) === index;
+            //}
 
-            // Renseignement des champs pour le menu déroulant
-            var selectZoneGeoActionsDemat = $("#selectZoneGeoActionsDemat");
-            zones_geo_labels.unshift("971-GUADELOUPE")
-            zones_geo_labels = zones_geo_labels.filter(onlyUnique);
-            for (var i = 0; i < zones_geo_labels.length; i++) {
-                var option = $("<option>");
-                option.text(zones_geo_labels[i]);
-                selectZoneGeoActionsDemat.append(option);
-            }
+            //// Renseignement des champs pour le menu déroulant
+            //var selectZoneGeoActionsDemat = $("#selectZoneGeoActionsDemat");
+            //zones_geo_labels.unshift("971-GUADELOUPE")
+            //zones_geo_labels = zones_geo_labels.filter(onlyUnique);
+            //for (var i = 0; i < zones_geo_labels.length; i++) {
+            //    var option = $("<option>");
+            //    option.text(zones_geo_labels[i]);
+            //    selectZoneGeoActionsDemat.append(option);
+            //}
 
-            display_dematerialized_actions_zone_geo(zones_geo_labels[0]);
+            //display_dematerialized_actions_zone_geo(zones_geo_labels[0]);
         
         }
     });
@@ -766,6 +845,7 @@ $(document).ready(function () {
 
     // Fonction pour gérer la soumission du formulaire adresse 
     async function onSubmitForm(event) {
+        console.log("onSubmitForm");
 
         event.preventDefault();
     
@@ -800,19 +880,35 @@ $(document).ready(function () {
             document.getElementById('error-message').innerText = "L'adresse entrée apparaît en dehors du territoire français";
             return ;
         }
-
         // Filtre des actions à afficher
+        
+        const dispPHMPMR = $('#display_PHM_PMR');
+        if (dispPHMPMR[0].checked) {
+            data = filter_column(csvData.data, "est_accessible_pmr");
+        } else {
+            data = csvData.data;
+        }
+
         const dispPublicRestreint = $('#display_public_restreint');
         if (dispPublicRestreint[0].checked) {
-            data = csvData.data;
+            data = data
         } else {
-            data = filter_column(csvData.data, "est_grand_public", on_true=true);
+            data = filter_column(data, "est_tout_public", on_true=true);
         }
 
         const dispActionPassees = $('#display_actions_passees');
         if (!dispActionPassees[0].checked) {
             data = filter_passed_date(data);
         }
+
+        // Filtre sur la date de début et de fin. On utilise la valeur de deux input type date comparé 
+        const dateDebut = $("#date_debut").val();
+        const dateFin = $("#date_fin").val();
+        data = data.filter(function(i) {
+            return i.date_debut.getTime() >= new Date(dateDebut).getTime() && i.date_fin.getTime() <= new Date(dateFin).getTime();
+        });
+
+
 
         data = filter_distance(data, latitude, longitude, distance);
 
@@ -959,14 +1055,22 @@ $(document).ready(function () {
 
         // On filtre les données
 
+        const dispPHMPMR = $('#display_PHM_PMR');
+        if (dispPHMPMR[0].checked) {
+            data = filter_column(csvData.data, "est_accessible_pmr");
+            console.log(data)
+        } else {
+            data = csvData.data;
+        }
+
         // Actions public restreint 
 
         const dispPublicRestreint = $('#display_public_restreint');
 
         if (!dispPublicRestreint[0].checked){
-            data = filter_column(csvData.data, "est_grand_public") 
+            data = filter_column(data, "est_grand_public") 
         } else {
-            data = csvData.data;
+            data = data;
             catActionFilter = "Action grand public et public restreint - " + catActionFilter;
         };
 
@@ -974,6 +1078,14 @@ $(document).ready(function () {
         if (!dispActionPassees[0].checked) {
             data = filter_passed_date(data);
         }
+
+        // Filtre sur la date de début et de fin. On utilise la valeur de deux input type date comparé
+        const dateDebut = $('#date_debut').val();
+        const dateFin = $('#date_fin').val();
+        data = data.filter(function(i) {
+            return i.date_debut.getTime() >= new Date(dateDebut).getTime() && i.date_fin.getTime() <= new Date(dateFin).getTime();
+        });
+
 
         data = filter_risque_public_type_action(data, risques_to_filter_on, publics_to_filter_on, type_action_to_filter_on);
 
