@@ -1,0 +1,6 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/boza8232/JNR_file_deposit"
+PassengerBaseURI "/e3f15234-16ff-4c62-81cc-0ce7aeb05ef2"
+PassengerPython "/home/boza8232/virtualenv/JNR_file_deposit/3.11/bin/python"
+PassengerAppLogFile "/home/boza8232/JNR_file_deposit/log.lg"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END

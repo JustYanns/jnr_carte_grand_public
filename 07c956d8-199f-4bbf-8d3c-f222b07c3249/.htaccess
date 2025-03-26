@@ -1,0 +1,6 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/boza8232/JNR_dashboard"
+PassengerBaseURI "/07c956d8-199f-4bbf-8d3c-f222b07c3249"
+PassengerPython "/home/boza8232/virtualenv/JNR_dashboard/3.9/bin/python"
+PassengerAppLogFile "/home/boza8232/JNR_dashboard/log.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
