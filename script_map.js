@@ -893,6 +893,7 @@ $(document).ready(function () {
         if (dispPublicRestreint[0].checked) {
             data = data
         } else {
+            // TODOOOOOOOOOOOOOOOOOOOOOOOo
             data = filter_column(data, "est_tout_public", on_true=true);
         }
 
