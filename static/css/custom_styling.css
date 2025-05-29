@@ -16,7 +16,7 @@
 /* Police Marianne - Regular */
 @font-face {
     font-family: 'Marianne';
-    src: url('fonts/Marianne-Regular.woff2') format('woff2');
+    src: url('../fonts/Marianne-Regular.woff2') format('woff2');
 }
 
 body {

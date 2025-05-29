@@ -25,54 +25,54 @@ var zoomCircle;
 // Création des markers
 
 const riskNat_marker = L.icon({
-    iconUrl : "./icons/map_marker_nat.png",
+    iconUrl : "../icons/map_marker_nat.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 
 const riskTEch_marker = L.icon({
-    iconUrl : "./icons/map_marker_techno.png",
+    iconUrl : "../icons/map_marker_techno.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 
 const riskMult_marker = L.icon({
-    iconUrl : "./icons/map_marker_mixte.png",
+    iconUrl : "../icons/map_marker_mixte.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 
 const riskGeste_marker = L.icon({
-    iconUrl : "./icons/map_marker_geste.png",
+    iconUrl : "../icons/map_marker_geste.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 
 const riskNat_marker_b = L.icon({
-    iconUrl : "./icons/map_marker_nat.png",
+    iconUrl : "../icons/map_marker_nat.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 
 const riskTEch_marker_b = L.icon({
-    iconUrl : "./icons/map_marker_techno.png",
+    iconUrl : "../icons/map_marker_techno.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 const riskMult_marker_b = L.icon({
-    iconUrl : "./icons/map_marker_mixte.png",
+    iconUrl : "../icons/map_marker_mixte.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
 })
 const riskGeste_marker_b = L.icon({
-    iconUrl : "./icons/map_marker_geste.png",
+    iconUrl : "../icons/map_marker_geste.png",
     iconSize : [33,46],
     iconAnchor : [11,46],
     popupAnchor : [0,-46]
@@ -683,7 +683,7 @@ $(document).ready(function () {
     });
 
     // Chargement des info de zoom sur les départements
-    fetch('./data/dpt_zoom_info.json')
+    fetch('data/dpt_zoom_info.json')
         .then(response => response.json())
         .then(data => {
             OSM_dpt_data = data;
@@ -691,7 +691,7 @@ $(document).ready(function () {
         .catch(error => console.error('Une erreur s\'est produite :', error));
 
     // Chargement des info nb action / dossier
-    fetch('./data/statistiques_generales.json')
+    fetch('data/statistiques_generales.json')
         .then(response => response.json())
         .then(data => {
 
