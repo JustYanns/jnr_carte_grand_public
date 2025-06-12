@@ -590,7 +590,7 @@ $(document).ready(function () {
                     dateString = row[col_name];
                     dateParts = dateString.split("-"); // Divise la chaîne en trois parties : année, mois, jour
                     // Mois vont de 0 à 11 en js
-                    row[col_name] = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                    row[col_name] = new Date(parseInt(dateParts[2]), parseInt(dateParts[1]) - 1, parseInt(dateParts[0]));
                 })
 
                 // lien programme 
