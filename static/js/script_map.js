@@ -521,7 +521,7 @@ $(document).ready(function () {
         success: function (data) {
             
             csvData = Papa.parse(data, { header: true, skipEmptyLines: true });
-            
+            console.log(csvData.data)
             
             // On parse les colonnes de booléens et de flottant 
             var float_cols = ["lat","lon"]
@@ -619,7 +619,6 @@ $(document).ready(function () {
 
             // Afficher toutes les actions
             data = csvData.data
-            console.log(data)
 
             // plot des marqueurs
             var nb_actions = plot_actions_markers(data);
