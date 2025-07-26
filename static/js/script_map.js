@@ -519,9 +519,8 @@ $(document).ready(function () {
         url: 'data/actions_jnr.csv',
         dataType: 'text',
         success: function (data) {
-            
+            console.log(data)
             csvData = Papa.parse(data, { header: true, skipEmptyLines: true });
-            console.log(csvData.data)
             
             // On parse les colonnes de booléens et de flottant 
             var float_cols = ["lat","lon"]
