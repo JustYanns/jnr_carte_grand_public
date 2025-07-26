@@ -519,7 +519,6 @@ $(document).ready(function () {
         url: 'data/actions_jnr.csv',
         dataType: 'text',
         success: function (data) {
-            console.log(data)
             csvData = Papa.parse(data, { header: true, skipEmptyLines: true });
             
             // On parse les colonnes de booléens et de flottant 
@@ -582,7 +581,7 @@ $(document).ready(function () {
                 // Convertir les valeurs "True" et "False" en booléens
                 bool_cols.forEach(function(col_name) {
                     if (col_name == "est_grand_public") console.log(row[col_name], (row[col_name] == "True"))
-                    row[col_name] = (row[col_name] == "True") ? true : false
+                    row[col_name] = (row[col_name] == "True" || row[col_name] === true) ? true : false
                 })
 
                 date_cols.forEach(function(col_name) {
