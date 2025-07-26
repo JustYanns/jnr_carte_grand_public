@@ -582,7 +582,7 @@ $(document).ready(function () {
 
                 // Convertir les valeurs "True" et "False" en booléens
                 bool_cols.forEach(function(col_name) {
-                    row[col_name] = row[col_name] === "VRAI" ? true : false
+                    row[col_name] = (row[col_name] === "True") ? true : false
                 })
 
                 date_cols.forEach(function(col_name) {
@@ -619,6 +619,7 @@ $(document).ready(function () {
 
             // Afficher toutes les actions
             data = csvData.data
+            console.log(data)
 
             // plot des marqueurs
             var nb_actions = plot_actions_markers(data);
