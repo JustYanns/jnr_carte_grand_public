@@ -582,7 +582,7 @@ $(document).ready(function () {
 
                 // Convertir les valeurs "True" et "False" en booléens
                 bool_cols.forEach(function(col_name) {
-                    row[col_name] = row[col_name] === "True" ? true : false
+                    row[col_name] = row[col_name] === "VRAI" ? true : false
                 })
 
                 date_cols.forEach(function(col_name) {
