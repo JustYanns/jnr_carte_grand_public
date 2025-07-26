@@ -580,7 +580,6 @@ $(document).ready(function () {
 
                 // Convertir les valeurs "True" et "False" en booléens
                 bool_cols.forEach(function(col_name) {
-                    if (col_name == "est_grand_public") console.log(row[col_name], (row[col_name] == "True"))
                     row[col_name] = (row[col_name] == "True" || row[col_name] === true) ? true : false
                 })
 
