@@ -585,7 +585,7 @@ $(document).ready(function () {
 
                 date_cols.forEach(function(col_name) {
                     dateString = row[col_name];
-                    dateParts = dateString.split("-"); // Divise la chaîne en trois parties : année, mois, jour
+                    dateParts = dateString.split("-"); // Divise la chaîne en trois parties : jour, mois, année
                     // Mois vont de 0 à 11 en js
                     row[col_name] = new Date(parseInt(dateParts[2]), parseInt(dateParts[1]) - 1, parseInt(dateParts[0]));
                 })
